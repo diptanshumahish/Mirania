@@ -6,15 +6,58 @@ import SectionHead from "@/components/SectionHead";
 import { Arrow } from "@/components/Logo";
 import { about, site } from "@/data/site";
 import { brands, products } from "@/data/catalog";
+import { JsonLd, ORG_ID, breadcrumbList, canonical, webPage } from "@/lib/seo";
+
+const PATH = "/about";
+const TITLE = "About Mirania — 20+ Years of Premium Furniture in Kolkata";
+const DESCRIPTION =
+  "Founded in 2003, Mirania Furniture is a multi-designer boutique in Kolkata furnishing homes, offices and hospitality spaces across Eastern India.";
 
 export const metadata: Metadata = {
   title: "About",
-  description: about.history[0],
+  description: DESCRIPTION,
+  alternates: { canonical: canonical(PATH) },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: canonical(PATH),
+    type: "profile",
+    images: [{ url: "/img/site/about-banner-new.jpg", width: 1440, height: 972, alt: "Mirania showroom interior" }],
+  },
 };
+
+const trail = [
+  { name: "Home", path: "/" },
+  { name: "About", path: PATH },
+];
 
 export default function AboutPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPage(PATH, TITLE, DESCRIPTION, {
+            type: "AboutPage",
+            trail,
+            image: "/img/site/about-banner-new.jpg",
+          }),
+          breadcrumbList(trail),
+          {
+            "@type": "Organization",
+            "@id": ORG_ID,
+            // Narrative properties belong on the page that actually tells the
+            // story; the base Organization node lives in the root layout.
+            description: about.history[0],
+            slogan: site.tagline,
+            foundingDate: String(site.founded),
+            brand: brands.map((b) => ({
+              "@type": "Brand",
+              name: b.name,
+              url: `${site.url}/brands/${b.slug}`,
+            })),
+          },
+        ]}
+      />
       <header className="phead">
         <p className="mono-sm muted">Index / About</p>
         <div className="phead__row">

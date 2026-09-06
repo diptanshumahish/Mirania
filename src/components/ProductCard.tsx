@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Media from "./Media";
-import { brandName, subLabel, type Product } from "@/data/catalog";
+import { brandName, pieceLabel, subLabel, type Product } from "@/data/catalog";
 
 export default function ProductCard({
   product,
@@ -17,7 +17,10 @@ export default function ProductCard({
     <Link href={`/products/${product.slug}`} className="pcard">
       <Media
         src={product.image}
-        alt={product.name}
+        alt={`${product.name} ${pieceLabel(
+          product.category,
+          product.sub,
+        ).toLowerCase()} by ${brandName(product.brand)}`}
         ratio={4 / 5}
         sizes={sizes}
         priority={priority}

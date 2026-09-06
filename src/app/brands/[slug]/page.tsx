@@ -9,9 +9,23 @@ import {
   categoryBySlug,
   productsByBrand,
 } from "@/data/catalog";
-import { contact } from "@/data/site";
+import { contact, site } from "@/data/site";
+import {
+  JsonLd,
+  STORE_ID,
+  absolute,
+  breadcrumbList,
+  canonical,
+  itemList,
+  webPage,
+} from "@/lib/seo";
 
 type Params = { slug: string };
+
+/** "Netherlands" → "the Netherlands". Country names that take a definite article. */
+function originPhrase(origin: string) {
+  return /^(United|Netherlands|Philippines)\b/.test(origin) ? `the ${origin}` : origin;
+}
 
 export function generateStaticParams() {
   return brands.map((b) => ({ slug: b.slug }));
@@ -24,8 +38,33 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const b = brandBySlug.get(slug);
-  if (!b) return { title: "Brand" };
-  return { title: b.name, description: b.blurb };
+  if (!b) return { title: "Brand", robots: { index: false, follow: true } };
+
+  const count = productsByBrand(b.slug).length;
+  const path = `/brands/${b.slug}`;
+
+  // Lead with the house, the count and the origin; append the blurb's opening
+  // clause only while the whole line still fits inside a SERP snippet.
+  const lead = `${b.name} furniture in Kolkata — ${count} ${
+    count === 1 ? "piece" : "pieces"
+  } from ${originPhrase(b.origin)}, on the floor at Mirania.`;
+  const opener = b.blurb.split(". ")[0];
+  const description =
+    lead.length + opener.length + 3 <= 158 ? `${lead} ${opener}.` : lead;
+
+  return {
+    title: b.name,
+    description,
+    alternates: { canonical: canonical(path) },
+    openGraph: {
+      title: `${b.name} Furniture in Kolkata — Mirania`,
+      description,
+      url: canonical(path),
+      type: "website",
+      images: [{ url: b.cover, alt: `${b.name} furniture at Mirania` }],
+    },
+    ...(count === 0 ? { robots: { index: false, follow: true } } : {}),
+  };
 }
 
 export default async function BrandPage({ params }: { params: Promise<Params> }) {
@@ -43,8 +82,53 @@ export default async function BrandPage({ params }: { params: Promise<Params> })
   const index = brands.findIndex((x) => x.slug === b.slug);
   const next = brands[(index + 1) % brands.length];
 
+  const path = `/brands/${b.slug}`;
+  const trail = [
+    { name: "Home", path: "/" },
+    { name: "Brands", path: "/brands" },
+    { name: b.name, path },
+  ];
+
   return (
     <>
+      <JsonLd
+        data={[
+          webPage(path, `${b.name} Furniture in Kolkata`, b.blurb, {
+            type: "CollectionPage",
+            trail,
+            image: b.cover,
+          }),
+          breadcrumbList(trail),
+          {
+            "@type": "Brand",
+            "@id": `${site.url}${path}#brand`,
+            name: b.name,
+            description: b.blurb,
+            url: absolute(path),
+            logo: absolute(b.logo),
+            image: absolute(b.cover),
+            // Declares Mirania as the authorised retail point for the house —
+            // the relationship a "<brand> dealer near me" query resolves on.
+            makesOffer: {
+              "@type": "Offer",
+              availableAtOrFrom: { "@id": STORE_ID },
+              itemOffered: {
+                "@type": "Product",
+                name: `${b.name} furniture`,
+                category: "Furniture",
+              },
+            },
+          },
+          itemList(
+            path,
+            items.slice(0, 100).map((p) => ({
+              name: p.name,
+              path: `/products/${p.slug}`,
+            })),
+            `${b.name} pieces at Mirania`,
+          ),
+        ]}
+      />
       <header className="phead">
         <p className="mono-sm muted phead__crumbs">
           <Link href="/brands" className="link-u">

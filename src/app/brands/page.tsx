@@ -3,16 +3,62 @@ import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { Arrow } from "@/components/Logo";
 import { brands, productsByBrand } from "@/data/catalog";
+import { site } from "@/data/site";
+import { JsonLd, breadcrumbList, canonical, itemList, webPage } from "@/lib/seo";
+
+const PATH = "/brands";
+const TITLE = "Furniture Brands in Kolkata — Stanley, Bolia, Steelcase & More";
+const DESCRIPTION =
+  "Stanley, Bolia, Wendelbo, Viccarbe, Steelcase, Hunter Douglas, Grado, M.A.D and Michael Strads — nine design houses under one roof in Kolkata.";
 
 export const metadata: Metadata = {
   title: "Brands",
-  description:
-    "Stanley, Bolia, Wendelbo, Viccarbe, Steelcase, Hunter Douglas, Grado, M.A.D and Michael Strads — the houses Mirania carries.",
+  description: DESCRIPTION,
+  alternates: { canonical: canonical(PATH) },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: canonical(PATH),
+    type: "website",
+    images: [
+      {
+        url: "/img/site/stanley-collage.jpg",
+        width: 1500,
+        height: 844,
+        alt: "Furniture from the design houses Mirania carries",
+      },
+    ],
+  },
 };
+
+const trail = [
+  { name: "Home", path: "/" },
+  { name: "Brands", path: PATH },
+];
 
 export default function BrandsPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPage(PATH, TITLE, DESCRIPTION, { type: "CollectionPage", trail }),
+          breadcrumbList(trail),
+          itemList(
+            PATH,
+            brands.map((b) => ({ name: b.name, path: `/brands/${b.slug}` })),
+            "Design houses carried by Mirania",
+          ),
+          // Naming each house as a Brand entity is what lets a query like
+          // "Bolia Kolkata" resolve to this site rather than the maker's own.
+          ...brands.map((b) => ({
+            "@type": "Brand",
+            "@id": `${site.url}/brands/${b.slug}#brand`,
+            name: b.name,
+            description: b.blurb,
+            url: `${site.url}/brands/${b.slug}`,
+          })),
+        ]}
+      />
       <header className="phead">
         <p className="mono-sm muted">Index / Brands</p>
         <div className="phead__row">

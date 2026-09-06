@@ -3,16 +3,77 @@ import ContactForm from "@/components/ContactForm";
 import Media from "@/components/Media";
 import { Arrow } from "@/components/Logo";
 import { contact } from "@/data/site";
+import {
+  JsonLd,
+  STORE_ID,
+  breadcrumbList,
+  canonical,
+  webPage,
+} from "@/lib/seo";
+
+const PATH = "/contact";
+const TITLE = "Contact & Showroom — Mirania Furniture, East Topsia Road, Kolkata";
+const DESCRIPTION =
+  "Visit the Mirania showroom at #3 Mirania Gardens, 11F East Topsia Road, Kolkata 700046. Open Monday to Saturday, 10:00 to 19:30. Call +91 98319 13000.";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description:
-    "K3N Lifestyles, #3 Mirania Gardens, 11F East Topsia Road, Kolkata 700046. Monday to Saturday, 10:00 to 19:30.",
+  description: DESCRIPTION,
+  alternates: { canonical: canonical(PATH) },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: canonical(PATH),
+    images: [
+      {
+        url: "/img/site/fabric-mockup.jpg",
+        width: 1920,
+        height: 1280,
+        alt: "Fabric and finish samples at the Mirania showroom",
+      },
+    ],
+  },
 };
+
+const trail = [
+  { name: "Home", path: "/" },
+  { name: "Contact", path: PATH },
+];
 
 export default function ContactPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPage(PATH, TITLE, DESCRIPTION, { type: "ContactPage", trail }),
+          breadcrumbList(trail),
+          {
+            // Extends the FurnitureStore declared in the root layout with the
+            // detail that only exists on this page: every listed line, the
+            // directions link and the full opening-hours table.
+            "@type": "FurnitureStore",
+            "@id": STORE_ID,
+            telephone: contact.phones,
+            email: contact.email,
+            hasMap: contact.map,
+            openingHours: ["Mo-Sa 10:00-19:30"],
+            publicAccess: true,
+            isAccessibleForFree: true,
+            potentialAction: {
+              "@type": "ReserveAction",
+              name: "Book a showroom visit",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: contact.whatsapp,
+                actionPlatform: [
+                  "https://schema.org/DesktopWebPlatform",
+                  "https://schema.org/MobileWebPlatform",
+                ],
+              },
+            },
+          },
+        ]}
+      />
       <header className="phead">
         <p className="mono-sm muted">Index / Contact</p>
         <div className="phead__row">

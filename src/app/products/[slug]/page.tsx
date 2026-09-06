@@ -7,13 +7,23 @@ import { Arrow } from "@/components/Logo";
 import {
   brandBySlug,
   categoryBySlug,
+  pieceLabel,
   productBySlug,
   products,
   relatedProducts,
+  singular,
   subLabel,
 } from "@/data/catalog";
-import { contact } from "@/data/site";
+import { contact, site } from "@/data/site";
 import { assetExists } from "@/lib/asset";
+import {
+  JsonLd,
+  STORE_ID,
+  absolute,
+  breadcrumbList,
+  canonical,
+  webPage,
+} from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -28,13 +38,77 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const p = productBySlug.get(slug);
-  if (!p) return { title: "Product" };
+  if (!p) return { title: "Product", robots: { index: false, follow: true } };
+
   const brand = brandBySlug.get(p.brand)?.name ?? p.brand;
+  const type = subLabel(p.category, p.sub) ?? categoryBySlug.get(p.category)?.name;
+  const path = `/products/${p.slug}`;
+
+  // Front-loads the three things a buyer actually searches: the model name, what
+  // kind of piece it is, and the house that makes it. Catalogue names run from
+  // "Duette" to "Ultra Lux Motorised Bed With Twin Motors", so the optional
+  // parts are dropped in order of least value until the whole title survives a
+  // SERP without being truncated mid-word.
+  const piece = type ? singular(type) : null;
+  const named = piece
+    ? p.name.toLowerCase().includes(piece.toLowerCase())
+    : false;
+  const head = fit([
+    named ? null : `${p.name} ${piece} by ${brand}`,
+    `${p.name} by ${brand}`,
+    p.name,
+  ], TITLE_BUDGET);
+  // A handful of names ("Ultra Lux Motorised Bed With Twin Motors") are longer
+  // than the whole budget on their own. Those opt out of the template and take
+  // a compact suffix instead, so the piece name is never the part truncated.
+  const title =
+    head.length <= TITLE_BUDGET
+      ? head
+      : { absolute: `${head} — Mirania, Kolkata` };
+
+  const description = clamp(
+    `${p.name}${
+      piece && !named ? ` ${piece.toLowerCase()}` : ""
+    } by ${brand}, on the floor at Mirania in Kolkata. Finishes, fabrics and dimensions confirmed at enquiry — delivered and installed.`,
+    `${p.name} by ${brand}, on the floor at Mirania in Kolkata. Finishes, fabrics and dimensions are confirmed at enquiry.`,
+  );
+
   return {
-    title: `${p.name} — ${brand}`,
-    description: `${p.name} by ${brand}, available through Mirania, Kolkata.`,
-    openGraph: { images: [p.image] },
+    title,
+    description,
+    alternates: { canonical: canonical(path) },
+    openGraph: {
+      title: `${title} — Mirania, Kolkata`,
+      description,
+      url: canonical(path),
+      type: "website",
+      images: [{ url: p.image, alt: `${p.name} by ${brand}` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [p.image],
+    },
   };
+}
+
+/**
+ * Google truncates around 60 characters of title. `TITLE_SUFFIX` is appended by
+ * the root layout's template, so only the remainder is ours to spend.
+ */
+const TITLE_SUFFIX = " — Mirania Furniture, Kolkata";
+const TITLE_BUDGET = 62 - TITLE_SUFFIX.length;
+
+/** First candidate that fits the budget; the last one is the guaranteed fallback. */
+function fit(candidates: (string | null)[], budget: number) {
+  const usable = candidates.filter((c): c is string => Boolean(c));
+  return usable.find((c) => c.length <= budget) ?? usable[usable.length - 1];
+}
+
+/** Preferred description, or the shorter one when the preferred is over-long. */
+function clamp(preferred: string, fallback: string) {
+  return preferred.length <= 168 ? preferred : fallback;
 }
 
 export default async function ProductPage({ params }: { params: Promise<Params> }) {
@@ -57,8 +131,82 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
     brand ? ` by ${brand.name}` : ""
   }.`;
 
+  const path = `/products/${p.slug}`;
+  const brandName = brand?.name ?? p.brand;
+  const typeLabel = pieceLabel(p.category, p.sub);
+  const description = `${p.name} ${typeLabel.toLowerCase()} by ${brandName}, available through Mirania in Kolkata. Finishes, fabrics and dimensions are confirmed at enquiry.`;
+
+  const trail = [
+    { name: "Home", path: "/" },
+    { name: "Collections", path: "/collections" },
+    ...(category
+      ? [{ name: category.name, path: `/collections/${category.slug}` }]
+      : []),
+    { name: p.name, path },
+  ];
+
   return (
     <>
+      <JsonLd
+        data={[
+          webPage(path, `${p.name} by ${brandName}`, description, {
+            type: "ItemPage",
+            trail,
+            image: p.image,
+          }),
+          breadcrumbList(trail),
+          {
+            "@type": "Product",
+            "@id": `${site.url}${path}#product`,
+            name: p.name,
+            description,
+            sku: p.slug,
+            mpn: p.slug,
+            url: absolute(path),
+            image: views.map(absolute),
+            category: category?.name ?? "Furniture",
+            ...(brand
+              ? {
+                  brand: {
+                    "@type": "Brand",
+                    "@id": `${site.url}/brands/${brand.slug}#brand`,
+                    name: brand.name,
+                    url: absolute(`/brands/${brand.slug}`),
+                  },
+                  manufacturer: { "@type": "Organization", name: brand.name },
+                  countryOfOrigin: { "@type": "Country", name: brand.origin },
+                }
+              : {}),
+            ...(sub
+              ? {
+                  additionalProperty: {
+                    "@type": "PropertyValue",
+                    name: "Type",
+                    value: sub,
+                  },
+                }
+              : {}),
+            /**
+             * No price is published for any piece — every quote is specified
+             * per room, and Mirania sells through the showroom rather than a
+             * cart. The Offer therefore states availability, seller and the
+             * enquiry URL and omits `price` entirely. Google reports a missing
+             * price as a warning, not an error; inventing one would be worse
+             * than forgoing the merchant rich result.
+             */
+            offers: {
+              "@type": "Offer",
+              url: absolute(path),
+              availability: "https://schema.org/InStock",
+              itemCondition: "https://schema.org/NewCondition",
+              priceCurrency: "INR",
+              availableAtOrFrom: { "@id": STORE_ID },
+              seller: { "@id": STORE_ID },
+              areaServed: { "@type": "City", name: "Kolkata" },
+            },
+          },
+        ]}
+      />
       <header className="phead">
         <p className="mono-sm muted phead__crumbs">
           <Link href="/collections" className="link-u">
@@ -84,7 +232,9 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
               <Media
                 key={src}
                 src={src}
-                alt={`${p.name} — view ${i + 1}`}
+                alt={`${p.name} ${typeLabel.toLowerCase()}${
+                  brand ? ` by ${brand.name}` : ""
+                }${views.length > 1 ? `, view ${i + 1} of ${views.length}` : ""}`}
                 ratio={4 / 3}
                 sizes="(max-width: 991px) 100vw, 55vw"
                 priority={i === 0}

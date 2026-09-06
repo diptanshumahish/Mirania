@@ -10,16 +10,54 @@ import {
   products,
   productsInCategory,
 } from "@/data/catalog";
+import { JsonLd, breadcrumbList, canonical, itemList, webPage } from "@/lib/seo";
+
+const PATH = "/collections";
+const TITLE = "Furniture Collections — Seating, Tables, Beds & Storage in Kolkata";
+const DESCRIPTION = `Browse ${products.length} pieces across ${activeCategories.length} collections at Mirania, Kolkata — seating, tables, beds, consoles and Hunter Douglas window fashion.`;
 
 export const metadata: Metadata = {
   title: "Collections",
-  description:
-    "Seating, tables, beds, storage and window fashion from nine design houses, held on one floor in Kolkata.",
+  description: DESCRIPTION,
+  alternates: { canonical: canonical(PATH) },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: canonical(PATH),
+    type: "website",
+    images: [
+      {
+        url: "/img/site/slider02.jpg",
+        width: 1920,
+        height: 1080,
+        alt: "Furniture collections on the Mirania showroom floor",
+      },
+    ],
+  },
 };
+
+const trail = [
+  { name: "Home", path: "/" },
+  { name: "Collections", path: PATH },
+];
 
 export default function CollectionsIndex() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPage(PATH, TITLE, DESCRIPTION, { type: "CollectionPage", trail }),
+          breadcrumbList(trail),
+          itemList(
+            PATH,
+            activeCategories.map((c) => ({
+              name: c.name,
+              path: `/collections/${c.slug}`,
+            })),
+            "Furniture collections",
+          ),
+        ]}
+      />
       <header className="phead">
         <p className="mono-sm muted">Index / Collections</p>
         <div className="phead__row">

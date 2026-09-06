@@ -67,6 +67,6 @@ export const about = {
 } as const;
 
 export const credits = {
-  year: 2025,
+  year: 2026,
   line: "© Mirania. All rights reserved.",
 } as const;

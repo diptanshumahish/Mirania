@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Media from "@/components/Media";
 import Reveal from "@/components/Reveal";
@@ -11,13 +12,52 @@ import {
   products,
   productsInCategory,
 } from "@/data/catalog";
-import { about, contact } from "@/data/site";
+import { about, contact, site } from "@/data/site";
+import { JsonLd, itemList, webPage } from "@/lib/seo";
+
+const DESCRIPTION =
+  "Mirania is a multi-designer furniture boutique in Kolkata — Stanley, Bolia, Wendelbo, Viccarbe, Steelcase and Hunter Douglas, delivered and installed.";
+
+export const metadata: Metadata = {
+  // The root layout already sets the default title; restating it here keeps the
+  // home page off the `%s — Mirania Furniture, Kolkata` template.
+  description: DESCRIPTION,
+  alternates: { canonical: site.url },
+  openGraph: {
+    url: site.url,
+    description: DESCRIPTION,
+    images: [
+      {
+        url: "/img/site/slider01.jpg",
+        width: 1920,
+        height: 1080,
+        alt: "A Mirania interior — layered seating, timber and soft light",
+      },
+    ],
+  },
+};
 
 export default function Home() {
   const houses = brands.length;
 
   return (
     <>
+      <JsonLd
+        data={[
+          webPage("/", `${site.legalName} — Premium Furniture, Kolkata`, DESCRIPTION, {
+            type: "CollectionPage",
+            image: "/img/site/slider01.jpg",
+          }),
+          itemList(
+            "/",
+            activeCategories.map((c) => ({
+              name: c.name,
+              path: `/collections/${c.slug}`,
+            })),
+            "Furniture collections at Mirania",
+          ),
+        ]}
+      />
       <Intro />
 
       {/* ---------------------------------------------------------------- */}

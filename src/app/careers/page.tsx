@@ -2,12 +2,31 @@ import type { Metadata } from "next";
 import Media from "@/components/Media";
 import CareersForm from "@/components/CareersForm";
 import { contact } from "@/data/site";
+import { JsonLd, ORG_ID, breadcrumbList, canonical, webPage } from "@/lib/seo";
+
+const PATH = "/careers";
+const TITLE = "Careers at Mirania — Furniture Sales & Design Jobs in Kolkata";
+const DESCRIPTION =
+  "Mirania is hiring across sales, design and logistics at our East Topsia Road showroom in Kolkata. Send your CV to info@mirania.in.";
 
 export const metadata: Metadata = {
   title: "Careers",
-  description:
-    "Mirania is hiring across sales, design and logistics at our Kolkata showroom.",
+  description: DESCRIPTION,
+  alternates: { canonical: canonical(PATH) },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: canonical(PATH),
+    images: [
+      { url: "/img/site/career-banner.jpg", width: 1440, height: 396, alt: "Mirania team at work" },
+    ],
+  },
 };
+
+const trail = [
+  { name: "Home", path: "/" },
+  { name: "Careers", path: PATH },
+];
 
 const values = [
   {
@@ -27,6 +46,27 @@ const values = [
 export default function CareersPage() {
   return (
     <>
+      <JsonLd
+        data={[
+          webPage(PATH, TITLE, DESCRIPTION, {
+            trail,
+            image: "/img/site/career-banner.jpg",
+          }),
+          breadcrumbList(trail),
+          {
+            // No JobPosting nodes: none of the roles carry a title, date or
+            // salary, and Google penalises JobPosting markup without them.
+            // An open application route is described instead.
+            "@type": "Organization",
+            "@id": ORG_ID,
+            potentialAction: {
+              "@type": "ApplyAction",
+              name: "Send a CV to Mirania",
+              target: `mailto:${contact.email}`,
+            },
+          },
+        ]}
+      />
       <header className="phead">
         <p className="mono-sm muted">Index / Careers</p>
         <div className="phead__row">

@@ -232,6 +232,26 @@ export function subLabel(category: string, sub: string | null) {
   return c?.subs.find((s) => s.slug === sub)?.name ?? null;
 }
 
+/**
+ * "Dining Chairs" -> "Dining Chair". Catalogue labels are plural; one piece is
+ * not. The sibilant rule has to come first, or "Mattresses" and "Benches" lose
+ * only the trailing "s" and end up as "Mattresse" and "Benche".
+ */
+export function singular(label: string) {
+  return label
+    .replace(/(ss|sh|ch|x|z)es$/i, "$1")
+    .replace(/ies$/i, "y")
+    .replace(/([^s])s$/i, "$1");
+}
+
+/**
+ * The most specific singular label for a piece — its subcategory if it has one,
+ * otherwise its category. Used in titles, descriptions and image alt text.
+ */
+export function pieceLabel(category: string, sub: string | null) {
+  return singular(subLabel(category, sub) ?? categoryLabel(category));
+}
+
 export function brandName(slug: string) {
   return brandBySlug.get(slug)?.name ?? slug;
 }
