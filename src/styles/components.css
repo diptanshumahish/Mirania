@@ -463,11 +463,14 @@
   border-bottom: 1px solid var(--rule);
 }
 .deflist__row:first-child { border-top: 1px solid var(--rule); }
+/* Half a page wide, a 22rem label track strands the value out in the middle of
+   the row. The tight variant keeps the pair reading as one line. */
+.deflist--tight .deflist__row { grid-template-columns: 13rem minmax(0, 1fr); }
 @container (max-width: 42rem) {
-  .deflist__row { grid-template-columns: 1fr; gap: 0.6rem; }
+  .deflist .deflist__row { grid-template-columns: 1fr; gap: 0.6rem; }
 }
 @media screen and (max-width: 780px) {
-  .deflist__row { grid-template-columns: 1fr; gap: 0.6rem; }
+  .deflist .deflist__row { grid-template-columns: 1fr; gap: 0.6rem; }
 }
 
 /* --------------------------------------------------------------------------

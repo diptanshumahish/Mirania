@@ -90,8 +90,11 @@ export default function ContactPage() {
 
       <section className="block-pad" style={{ paddingTop: "4.8rem" }}>
         <div className="split">
-          <div className="stack" style={{ gap: "3.2rem" }}>
-            <div className="deflist">
+          <div className="stack">
+            <h2 className="h4" style={{ marginBottom: "2.4rem" }}>
+              Visit the showroom
+            </h2>
+            <div className="deflist deflist--tight">
               <div className="deflist__row">
                 <span className="mono-sm muted">Address</span>
                 <address className="t-md" style={{ fontStyle: "normal", lineHeight: 1.6 }}>
@@ -149,15 +152,22 @@ export default function ContactPage() {
               target="_blank"
               rel="noreferrer"
               className="btn arrow-link"
-              style={{ alignSelf: "flex-start" }}
+              style={{ alignSelf: "flex-start", marginTop: "3.2rem" }}
             >
               Get directions <Arrow className="arrow" />
             </a>
           </div>
 
-          <div className="stack" style={{ gap: "2.4rem" }}>
-            <h2 className="h4">Send us a message</h2>
-            <ContactForm />
+          <div className="stack">
+            <h2 className="h4" style={{ marginBottom: "2.4rem" }}>
+              Send us a message
+            </h2>
+            {/* Answers the top border of the deflist opposite, so the two halves
+                of the section start on the same line rather than near it. */}
+            <hr className="rule" />
+            <div style={{ paddingTop: "2rem" }}>
+              <ContactForm />
+            </div>
           </div>
         </div>
       </section>
