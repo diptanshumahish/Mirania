@@ -262,7 +262,7 @@
   flex: 1;
   min-width: 0;
 }
-.crow__tags { flex: none; display: flex; flex-direction: column; gap: 0.8rem; align-items: flex-start; }
+.crow__tags { flex: none; display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start; }
 .crow__body { max-width: 46rem; display: flex; flex-direction: column; gap: 1.6rem; }
 .crow__img {
   flex: none;
@@ -451,7 +451,10 @@
 }
 @media screen and (max-width: 780px) { .figrow { grid-template-columns: 1fr; } }
 
-.deflist { display: grid; gap: 0; }
+/* The 22rem label track only works while the list has room for it. Sizing on
+   the container rather than the viewport means a deflist dropped into a narrow
+   column stacks instead of spilling its values over the next column. */
+.deflist { display: grid; gap: 0; min-width: 0; container-type: inline-size; }
 .deflist__row {
   display: grid;
   grid-template-columns: 22rem minmax(0, 1fr);
@@ -460,6 +463,9 @@
   border-bottom: 1px solid var(--rule);
 }
 .deflist__row:first-child { border-top: 1px solid var(--rule); }
+@container (max-width: 42rem) {
+  .deflist__row { grid-template-columns: 1fr; gap: 0.6rem; }
+}
 @media screen and (max-width: 780px) {
   .deflist__row { grid-template-columns: 1fr; gap: 0.6rem; }
 }
@@ -668,6 +674,153 @@
 .stat__n { font-size: 5.2rem; font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
 @media screen and (max-width: 780px) { .stat__n { font-size: 3.6rem; } }
 .stat__l { margin-top: 0.8rem; }
+
+/* --------------------------------------------------------------------------
+   The Grain — the column
+   -------------------------------------------------------------------------- */
+
+/* Lead issue on the index: the meta sits in the 22rem rail, stacked, so the
+   headline keeps the full measure of the wide column. */
+.jlead {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+.jlead__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--ink);
+}
+.jlead__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  max-width: 62rem;
+}
+
+/* Back issues, read as a ruled archive rather than a second product grid. */
+.jarchive { border-bottom: 1px solid var(--rule); }
+.jrow {
+  display: grid;
+  grid-template-columns: 7rem 13rem minmax(0, 1fr) 11rem;
+  gap: 3.2rem;
+  align-items: start;
+  padding: 3.2rem 0;
+  border-top: 1px solid var(--rule);
+}
+.jrow.is-compact { grid-template-columns: 7rem 13rem minmax(0, 1fr); }
+.jrow__n {
+  padding-top: 0.2rem;
+  transition: color 0.3s var(--ease);
+}
+.jrow:hover .jrow__n { color: var(--accent); }
+.jrow__date { padding-top: 0.5rem; }
+.jrow__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.2rem;
+  max-width: 52rem;
+}
+.jrow__title { transition: transform 0.4s var(--ease); }
+.jrow:hover .jrow__title { transform: translateX(0.6rem); }
+
+/* Below the fold of the desktop grid the number and date share a line above
+   the title, with the plate held beside them. */
+@media screen and (max-width: 991px) {
+  .jrow {
+    grid-template-columns: minmax(0, 1fr) 9rem;
+    gap: 1.6rem 2.4rem;
+    padding: 2.8rem 0;
+  }
+  .jrow.is-compact { grid-template-columns: minmax(0, 1fr); }
+  .jrow__n { grid-row: 1; grid-column: 1; padding-top: 0; }
+  .jrow__date {
+    grid-row: 1;
+    grid-column: 1;
+    padding-top: 0;
+    justify-self: end;
+  }
+  .jrow__body { grid-row: 2; grid-column: 1; max-width: none; }
+  .jrow__thumb { grid-row: 1 / span 2; grid-column: 2; }
+  .jrow:hover .jrow__title { transform: none; }
+}
+@media screen and (max-width: 560px) {
+  .jrow { grid-template-columns: minmax(0, 1fr) 7rem; }
+}
+
+/* Article byline — date, length, dateline on one mono rule. */
+.jbyline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem;
+}
+.jbyline__sep {
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--ink-40);
+}
+
+/* Article meta rail. Stacked label-over-value, so it fits the 22rem sidebar
+   column that .deflist (a 22rem label track of its own) cannot. */
+.jmeta {
+  position: sticky;
+  top: calc(var(--nav-h) + 4.8rem);
+  display: flex;
+  flex-direction: column;
+}
+.jmeta__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.4rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.jmeta__row:first-child { border-top: 1px solid var(--rule); }
+@media screen and (max-width: 991px) {
+  .jmeta { position: static; }
+}
+
+/* The opening paragraph carries the reader in at a larger size. */
+.prose--lead > p:first-child {
+  font-size: 2.2rem;
+  line-height: 1.45;
+}
+@media screen and (max-width: 991px) {
+  .prose--lead > p:first-child { font-size: 1.9rem; }
+}
+
+/* Previous / next issue. */
+.jpager {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.jpager__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  min-height: 15rem;
+  padding: 3.2rem;
+  background: var(--paper);
+  transition: background 0.4s var(--ease);
+}
+.jpager__cell.is-next { align-items: flex-end; text-align: right; }
+a.jpager__cell:hover { background: var(--paper-warm); }
+@media screen and (max-width: 620px) {
+  .jpager { grid-template-columns: 1fr; }
+  .jpager__cell { padding: 2.4rem; min-height: 0; }
+  .jpager__cell.is-next { align-items: flex-start; text-align: left; }
+}
 
 /* ==========================================================================
    Motion

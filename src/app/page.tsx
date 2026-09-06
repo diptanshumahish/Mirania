@@ -8,6 +8,7 @@ import Intro from "@/components/Intro";
 import {
   activeCategories,
   brands,
+  COVER_RATIO,
   pickCover,
   products,
   productsInCategory,
@@ -130,10 +131,10 @@ export default function Home() {
                   >
                     <div className="crow__bio">
                       <div className="crow__tags">
-                        <span className="tag">
-                          {String(i + 1).padStart(2, "0")}
+                        <span className="mono">
+                          ({String(i + 1).padStart(2, "0")})
                         </span>
-                        <span className="tag is-bare">{count} pieces</span>
+                        <span className="mono-sm muted">{count} pieces</span>
                       </div>
                       <div className="crow__body">
                         <h3 className="h3">{c.name}</h3>
@@ -147,7 +148,7 @@ export default function Home() {
                       <Media
                         src={pickCover(c.slug, i * 7)}
                         alt={c.name}
-                        ratio={506 / 608}
+                        ratio={COVER_RATIO}
                         sizes="(max-width: 991px) 100vw, 50vw"
                         contain
                         zoom

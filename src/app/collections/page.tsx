@@ -6,6 +6,7 @@ import { Arrow } from "@/components/Logo";
 import {
   activeCategories,
   activeSubs,
+  COVER_RATIO,
   pickCover,
   products,
   productsInCategory,
@@ -88,8 +89,8 @@ export default function CollectionsIndex() {
                 >
                   <div className="crow__bio">
                     <div className="crow__tags">
-                      <span className="tag">{String(i + 1).padStart(2, "0")}</span>
-                      <span className="tag is-bare">{count} pieces</span>
+                      <span className="mono">({String(i + 1).padStart(2, "0")})</span>
+                      <span className="mono-sm muted">{count} pieces</span>
                     </div>
                     <div className="crow__body">
                       <h2 className="h3">{c.name}</h2>
@@ -108,7 +109,7 @@ export default function CollectionsIndex() {
                     <Media
                       src={pickCover(c.slug, i * 5)}
                       alt={c.name}
-                      ratio={506 / 608}
+                      ratio={COVER_RATIO}
                       sizes="(max-width: 991px) 100vw, 50vw"
                       contain
                       zoom

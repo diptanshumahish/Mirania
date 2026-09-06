@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { entries } from "@/data/journal";
 import {
   activeCategories,
   activeSubs,
@@ -24,7 +25,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/about"), lastModified: now, changeFrequency: "yearly", priority: 0.6 },
     { url: url("/contact"), lastModified: now, changeFrequency: "yearly", priority: 0.8 },
     { url: url("/careers"), lastModified: now, changeFrequency: "monthly", priority: 0.4 },
+    { url: url("/journal"), lastModified: now, changeFrequency: "monthly", priority: 0.7 },
   ];
+
+  // Editorial pages carry their own publication date rather than the build date,
+  // so a rebuild does not tell Google five-year-old writing has just changed.
+  const journalPages: MetadataRoute.Sitemap = entries.map((e) => ({
+    url: url(`/journal/${e.slug}`),
+    lastModified: new Date(e.date),
+    changeFrequency: "yearly" as const,
+    priority: 0.5,
+  }));
 
   const categoryPages: MetadataRoute.Sitemap = activeCategories.flatMap((c) => [
     {
@@ -59,5 +70,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...categoryPages, ...brandPages, ...productPages];
+  return [
+    ...staticPages,
+    ...journalPages,
+    ...categoryPages,
+    ...brandPages,
+    ...productPages,
+  ];
 }

@@ -256,6 +256,14 @@ export function brandName(slug: string) {
   return brandBySlug.get(slug)?.name ?? slug;
 }
 
+/**
+ * The catalogue ships on one plate size — 537x428 — and every cover is drawn
+ * `contain`, so a frame of any other shape letterboxes the piece instead of
+ * cropping it. Matching the frame to the plate is what keeps the dead band out
+ * of the row.
+ */
+export const COVER_RATIO = 537 / 428;
+
 /** Deterministic pick used for editorial imagery so builds stay stable. */
 export function pickCover(categorySlug: string, offset = 0) {
   const list = productsInCategory(categorySlug);
