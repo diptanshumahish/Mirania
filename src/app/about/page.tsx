@@ -116,8 +116,8 @@ export default function AboutPage() {
       </section>
 
       <section className="pad-x afigures">
-        <Media src="/img/site/about-large-2.jpg" alt="A blue leather armchair by a window" ratio={3 / 4} sizes="(max-width: 780px) 100vw, 40vw" />
-        <Media src="/img/site/slider01.jpg" alt="A light-filled lounge with layered seating" ratio={4 / 3} sizes="(max-width: 780px) 100vw, 60vw" />
+        <Media src="/img/site/about-large-2.jpg" alt="A blue leather armchair by a window" ratio={3 / 4} sizes="(max-width: 780px) 100vw, 40vw" unveil />
+        <Media src="/img/site/slider01.jpg" alt="A light-filled lounge with layered seating" ratio={4 / 3} sizes="(max-width: 780px) 100vw, 60vw" unveil />
       </section>
 
       {/* Vision & Mission ---------------------------------------------- */}

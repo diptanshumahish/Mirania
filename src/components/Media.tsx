@@ -13,6 +13,7 @@ export default function Media({
   contain = false,
   className = "",
   zoom = false,
+  unveil = false,
 }: {
   src: string;
   alt: string;
@@ -22,11 +23,14 @@ export default function Media({
   contain?: boolean;
   className?: string;
   zoom?: boolean;
+  /** Rise out of an arch as it scrolls into view (see ScrollFx). */
+  unveil?: boolean;
 }) {
   return (
     <div
       className={`media rounded ${contain ? "is-contain" : ""} ${zoom ? "zoom" : ""} ${className}`}
       style={{ aspectRatio: String(ratio) }}
+      data-unveil={unveil || undefined}
     >
       <Image
         src={assetSrc(src)}

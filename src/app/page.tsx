@@ -6,6 +6,7 @@ import { Arrow } from "@/components/Logo";
 import Intro from "@/components/Intro";
 import ParallaxStage from "@/components/ParallaxStage";
 import PinnedRail from "@/components/PinnedRail";
+import ScrollWords from "@/components/ScrollWords";
 import {
   activeCategories,
   brands,
@@ -107,10 +108,10 @@ export default function Home() {
         <Reveal className="legacy__grid">
           <p className="mono-sm muted legacy__label">The house of Mirania</p>
           <div className="legacy__body">
-            <p className="h3 balance legacy__statement">
-              A multi-designer furniture boutique in Eastern India, driven to
-              transform spaces into spectacular, comfortable havens.
-            </p>
+            <ScrollWords
+              className="h3 balance legacy__statement"
+              text="A multi-designer furniture boutique in Eastern India, driven to transform spaces into spectacular, comfortable havens."
+            />
             <div className="legacy__facts">
               <div>
                 <p className="legacy__n">20+</p>
@@ -231,6 +232,7 @@ export default function Home() {
                       alt={`${b.name} furniture`}
                       ratio={4 / 5}
                       sizes="(max-width: 991px) 50vw, 30vw"
+                      unveil
                     />
                     <div className="hcard__veil" aria-hidden="true">
                       <p className="t-base">{b.blurb}</p>
@@ -262,15 +264,18 @@ export default function Home() {
             alt="A Mirania interior — layered seating, timber and soft light"
             ratio={4 / 5}
             sizes="(max-width: 991px) 100vw, 50vw"
+            unveil
           />
         </div>
 
         <div className="approach__body">
           <Reveal className="approach__part">
             <p className="mono-sm muted">Our approach</p>
-            <blockquote className="approach__quote balance">
-              &ldquo;{about.pullQuote}&rdquo;
-            </blockquote>
+            <ScrollWords
+              as="blockquote"
+              className="approach__quote balance"
+              text={`\u201C${about.pullQuote}\u201D`}
+            />
             <Link href="/about" className="mono arrow-link link-u">
               Read our story <Arrow className="arrow" />
             </Link>

@@ -3,6 +3,9 @@ import "@/styles/globals.css";
 import "@/styles/components.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import ViewTransitions from "@/components/ViewTransitions";
+import ScrollFx from "@/components/ScrollFx";
+import EasterEggs from "@/components/EasterEggs";
 import { site } from "@/data/site";
 import { JsonLd, furnitureStore, organization, website } from "@/lib/seo";
 
@@ -102,6 +105,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main id="main">{children}</main>
         <Footer />
+        <ViewTransitions />
+        <ScrollFx />
+        <EasterEggs />
       </body>
     </html>
   );
