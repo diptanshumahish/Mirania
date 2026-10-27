@@ -43,7 +43,7 @@
   -webkit-backdrop-filter: blur(18px) saturate(1.2);
   backdrop-filter: blur(18px) saturate(1.2);
   box-shadow: 0 0 0 1px rgba(34, 28, 22, 0.05), 0 1.2rem 3.2rem -1.6rem rgba(34, 28, 22, 0.22);
-  transition: background 0.5s var(--ease), box-shadow 0.5s var(--ease), -webkit-backdrop-filter 0.5s var(--ease), backdrop-filter 0.5s var(--ease);
+  transition: background 0.5s var(--ease), box-shadow 0.5s var(--ease), -webkit-backdrop-filter 0.5s var(--ease), backdrop-filter 0.5s var(--ease), min-height 0.5s var(--ease);
 }
 
 /* Over the homepage photograph: no ground, light type. */
@@ -885,24 +885,27 @@ a.jpager__cell:hover { background: var(--paper-warm); }
    Hover and interaction detail
    -------------------------------------------------------------------------- */
 
-/* Nav underline grows from the left rather than appearing whole. */
-.nav__link {
-  position: relative;
-}
-.nav__link::after {
-  content: "";
+/* A single underline travels between links instead of each link drawing its
+   own. Position and width come from Nav.tsx as --ink-x / --ink-w. */
+.nav__links { position: relative; }
+.nav__ink {
   position: absolute;
   left: 0;
-  bottom: 0.1rem;
-  width: 100%;
+  bottom: calc(50% - 1.3rem);
+  width: var(--ink-w, 0px);
   height: 1px;
   background: currentColor;
-  transform: scaleX(0);
+  transform: translateX(var(--ink-x, 0px)) scaleX(0);
   transform-origin: left;
-  transition: transform 0.35s var(--ease);
+  pointer-events: none;
+  transition: transform 0.5s var(--ease-out), width 0.5s var(--ease-out);
 }
-.nav__link:hover::after,
-.nav__link.is-current::after { transform: scaleX(1); }
+.nav__links.has-ink .nav__ink { transform: translateX(var(--ink-x, 0px)) scaleX(1); }
+
+/* Once the page moves, the bar draws in a little tighter. */
+.nav.is-scrolled:not(.is-over) .nav__bar { min-height: calc(var(--nav-h) - 1.2rem); }
+.nav.is-scrolled:not(.is-over) .lockup__mark { transform: scale(0.88); }
+.lockup__mark { transform-origin: left center; transition: transform 0.5s var(--ease); }
 
 /* Product cards: the caption follows the image up a touch. */
 .pcard__meta { transition: transform 0.45s var(--ease); }
@@ -952,6 +955,9 @@ a.jpager__cell:hover { background: var(--paper-warm); }
     transform: none;
     stroke-dashoffset: 0;
   }
+  .nav__ink,
+  .nav__bar,
+  .lockup__mark { transition: none; }
 }
 
 /* ==========================================================================

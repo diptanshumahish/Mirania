@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { contact, nav } from "@/data/site";
 import { Lockup, Arrow } from "./Logo";
 import StudioClock from "./StudioClock";
@@ -11,11 +11,33 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const linksRef = useRef<HTMLElement>(null);
   // The homepage opens on a full-bleed photograph; until the visitor scrolls
   // the bar sits on it with no ground of its own.
   const overHero = pathname === "/" && !scrolled && !open;
 
   useEffect(() => setOpen(false), [pathname]);
+
+  // One underline shared by every link: it slides to whichever link is under
+  // the pointer and settles back under the current page when the pointer leaves.
+  const placeInk = useCallback((target?: HTMLElement | null) => {
+    const links = linksRef.current;
+    if (!links) return;
+    const el = target ?? links.querySelector<HTMLElement>(".nav__link.is-current");
+    links.classList.toggle("has-ink", Boolean(el));
+    if (!el) return;
+    links.style.setProperty("--ink-x", `${el.offsetLeft}px`);
+    links.style.setProperty("--ink-w", `${el.offsetWidth}px`);
+  }, []);
+
+  useEffect(() => {
+    placeInk();
+    // Link widths change once the serif loads and whenever the root size flexes.
+    document.fonts?.ready.then(() => placeInk());
+    const onResize = () => placeInk();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [pathname, placeInk]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -50,16 +72,25 @@ export default function Nav() {
           <StudioClock />
         </div>
 
-        <nav className="nav__links hide-mobile" aria-label="Primary">
+        <nav
+          ref={linksRef}
+          className="nav__links hide-mobile"
+          aria-label="Primary"
+          onMouseLeave={() => placeInk()}
+          onBlur={() => placeInk()}
+        >
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={`nav__link ${pathname.startsWith(item.href) ? "is-current" : ""}`}
+              onMouseEnter={(e) => placeInk(e.currentTarget)}
+              onFocus={(e) => placeInk(e.currentTarget)}
             >
               {item.label}
             </Link>
           ))}
+          <span className="nav__ink" aria-hidden="true" />
         </nav>
 
         <button
