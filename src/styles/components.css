@@ -594,13 +594,31 @@ main { padding-top: var(--nav-space); }
   letter-spacing: -0.02em;
   text-align: center;
   white-space: nowrap;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(194, 162, 110, 0.5);
+  /* A quiet solid fill rather than an outline: Cormorant's contours overlap,
+     and a stroke draws every seam. */
+  color: rgba(194, 162, 110, 0.14);
   user-select: none;
   transition: color 0.8s var(--ease);
+  position: relative;
+  isolation: isolate;
+  padding-top: 4.8rem;
 }
-.footer__name em { font-style: italic; }
-.footer__name:hover { color: rgba(194, 162, 110, 0.08); }
+.footer__name:hover { color: rgba(194, 162, 110, 0.22); }
+
+/* The arcade: the mark's arch repeated as a hairline colonnade, rising out of
+   the page edge and fading before it reaches the top of the name. */
+.footer__name::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='160' fill='none' stroke='%23c2a26e' stroke-opacity='.22' stroke-width='1'%3E%3Cpath d='M8 160V56a40 40 0 0 1 80 0v104'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center bottom;
+  background-size: 9.6rem 16rem;
+  -webkit-mask-image: linear-gradient(to top, #000 10%, transparent 90%);
+  mask-image: linear-gradient(to top, #000 10%, transparent 90%);
+}
 
 @media screen and (max-width: 1100px) {
   .footer__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }

@@ -118,17 +118,13 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      {/* The name, set edge to edge as a drawn outline — the last thing on
-          the page. Decorative; the sr-only line below carries it for readers. */}
+      {/* The name, set edge to edge over a faint arcade of the mark's arches —
+          the last thing on the page. Decorative; the sr-only line below carries
+          it for readers. */}
       <p className="footer__name" aria-hidden="true">
-        {[..."Mira"].map((c, i) => (
+        {[..."Mirania"].map((c, i) => (
           <span key={i} className="footer__ch" style={{ "--i": i } as React.CSSProperties}>{c}</span>
         ))}
-        <em>
-          {[..."nia"].map((c, i) => (
-            <span key={i} className="footer__ch" style={{ "--i": i + 4 } as React.CSSProperties}>{c}</span>
-          ))}
-        </em>
       </p>
       <span className="sr-only">{site.legalName}</span>
     </footer>
