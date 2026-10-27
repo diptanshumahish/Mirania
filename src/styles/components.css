@@ -615,9 +615,10 @@ main { padding-top: var(--nav-space); }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='160' fill='none' stroke='%23c2a26e' stroke-opacity='.22' stroke-width='1'%3E%3Cpath d='M8 160V56a40 40 0 0 1 80 0v104'/%3E%3C/svg%3E");
   background-repeat: repeat-x;
   background-position: center bottom;
-  background-size: 9.6rem 16rem;
-  -webkit-mask-image: linear-gradient(to top, #000 10%, transparent 90%);
-  mask-image: linear-gradient(to top, #000 10%, transparent 90%);
+  /* Sized to the band, so whole arches show at every width. */
+  background-size: auto 100%;
+  -webkit-mask-image: linear-gradient(to top, #000 35%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 35%, transparent 100%);
 }
 
 @media screen and (max-width: 1100px) {
