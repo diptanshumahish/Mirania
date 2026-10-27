@@ -22,6 +22,8 @@ export type Category = {
   name: string;
   /** Editorial one-liner shown on the collection index. */
   blurb: string;
+  /** Room photograph used wherever the category is introduced. */
+  cover: string;
   subs: SubCategory[];
 };
 
@@ -30,7 +32,8 @@ export const categories: Category[] = [
     slug: "seating",
     name: "Seating",
     blurb:
-      "Sofas, lounge chairs, dining chairs and task seating — the pieces a room is organised around, built for the way a space is actually lived in.",
+      "Sofas, lounge chairs, dining chairs and task seating: the pieces a room is organised around, built for the way a space is actually lived in.",
+    cover: "/img/site/category-2.jpg",
     subs: [
       { slug: "sofa", name: "Sofas" },
       { slug: "lounge-chair", name: "Lounge Chairs" },
@@ -47,7 +50,8 @@ export const categories: Category[] = [
     slug: "table",
     name: "Tables",
     blurb:
-      "Coffee, side, dining and executive tables in solid timber, stone and steel — surfaces that hold a room together without asking for attention.",
+      "Coffee, side, dining and executive tables in solid timber, stone and steel, made to hold a room together without asking for attention.",
+    cover: "/img/site/category-4.jpg",
     subs: [
       { slug: "coffee-table", name: "Coffee Tables" },
       { slug: "dining-table", name: "Dining Tables" },
@@ -61,7 +65,8 @@ export const categories: Category[] = [
     slug: "beds-and-beddings",
     name: "Beds & Beddings",
     blurb:
-      "Beds, mattresses and pillows engineered for rest — the one category where comfort is measured rather than described.",
+      "Beds, mattresses and pillows engineered for rest, the one category where comfort is measured rather than described.",
+    cover: "/img/site/category-1.jpg",
     subs: [
       { slug: "bed", name: "Beds" },
       { slug: "mattresses", name: "Mattresses" },
@@ -72,7 +77,8 @@ export const categories: Category[] = [
     slug: "console-and-crockery-unit",
     name: "Console & Crockery",
     blurb:
-      "Storage that behaves like architecture — consoles, sideboards and crockery units that resolve a wall rather than fill it.",
+      "Consoles, sideboards and crockery units that resolve a wall rather than simply fill it.",
+    cover: "/img/site/category-3.jpg",
     subs: [],
   },
   {
@@ -80,13 +86,15 @@ export const categories: Category[] = [
     name: "Window Fashion",
     blurb:
       "Light, controlled. Motorised shades, sheers and blinds from Hunter Douglas, specified to the opening and the orientation.",
+    cover: "/img/site/hd-feature.jpg",
     subs: [],
   },
   {
     slug: "accessories",
     name: "Accessories",
     blurb:
-      "Lighting, rugs and accent objects — the last ten per cent that makes an interior read as finished.",
+      "Lighting, rugs and accent objects: the last ten per cent that makes an interior read as finished.",
+    cover: "/img/site/category-5.jpg",
     subs: [],
   },
 ];
@@ -102,6 +110,8 @@ export type Brand = {
   blurb: string;
   logo: string;
   cover: string;
+  /** Room photograph used where the house is introduced editorially. */
+  scene: string;
 };
 
 export const brands: Brand[] = [
@@ -113,6 +123,7 @@ export const brands: Brand[] = [
       "India's foremost luxury leather furniture house. Full-grain hides, recliner engineering and a catalogue deep enough to furnish an entire home in one language.",
     logo: "/img/f/stanley.jpg",
     cover: "/img/site/stanley-feature.jpg",
+    scene: "/img/site/slider03.jpg",
   },
   {
     slug: "bolia",
@@ -122,6 +133,7 @@ export const brands: Brand[] = [
       "New Scandinavian design. Bolia works with independent designers across the Nordics to produce soft, considered furniture made to order in Europe.",
     logo: "/img/f/bolia.jpg",
     cover: "/img/site/bolia-feature.jpg",
+    scene: "/img/site/bolia-feature.jpg",
   },
   {
     slug: "wendelbo",
@@ -131,6 +143,7 @@ export const brands: Brand[] = [
       "A family-run Danish upholstery house since 1965, known for generous seating silhouettes and a restrained, tactile material palette.",
     logo: "/img/f/wendelbo.jpg",
     cover: "/img/site/wendelbo-feature.jpg",
+    scene: "/img/site/wendelbo-feature.jpg",
   },
   {
     slug: "viccarbe",
@@ -140,6 +153,7 @@ export const brands: Brand[] = [
       "Valencian contemporary design, produced with Mediterranean craft and a roster of international architects. Sculptural lounge and table systems.",
     logo: "/img/f/viccarbe.jpg",
     cover: "/img/site/viccarbe-feature.jpg",
+    scene: "/img/site/viccarbe-feature1.jpg",
   },
   {
     slug: "steelcase",
@@ -149,6 +163,7 @@ export const brands: Brand[] = [
       "Workplace research turned into furniture. Ergonomic task seating and desking backed by more than a century of study into how people actually work.",
     logo: "/img/f/steelcase.jpg",
     cover: "/img/site/steelcase-feature.jpg",
+    scene: "/img/site/steelcase-feature1.jpg",
   },
   {
     slug: "hunter-douglas",
@@ -158,15 +173,17 @@ export const brands: Brand[] = [
       "The global standard in window covering. Duette, Silhouette, Pirouette and Luminette systems with PowerView motorisation.",
     logo: "/img/f/hunter-douglas.jpg",
     cover: "/img/site/hd-feature.jpg",
+    scene: "/img/site/hd-feature.jpg",
   },
   {
     slug: "grado",
     name: "Grado",
     origin: "Italy",
     blurb:
-      "Italian upholstery with a graphic, contemporary edge — sofas and seating built around bold volumes and confident colour.",
+      "Italian upholstery with a graphic, contemporary edge: sofas and seating built around bold volumes and confident colour.",
     logo: "/img/f/grado.jpg",
     cover: "/img/site/grado-feature.jpg",
+    scene: "/img/site/grado-feature.jpg",
   },
   {
     slug: "m-a-d",
@@ -176,6 +193,7 @@ export const brands: Brand[] = [
       "Modern accent design. Sculptural tables, barstools and seating that treat everyday furniture as an opportunity for form.",
     logo: "/img/f/m-a-d.jpg",
     cover: "/img/site/mad-feature.jpg",
+    scene: "/img/site/mad-feature1.jpg",
   },
   {
     slug: "michael-strads",
@@ -185,6 +203,7 @@ export const brands: Brand[] = [
       "Tailored lounge and dining seating, cut and finished with a couturier's attention to seam, stitch and stance.",
     logo: "/img/f/michael-strads.jpg",
     cover: "/img/site/ms-feature.jpg",
+    scene: "/img/site/ms-feature.jpg",
   },
 ];
 
@@ -202,6 +221,18 @@ export function productsInCategory(slug: string) {
 
 export function productsByBrand(slug: string) {
   return products.filter((p) => p.brand === slug);
+}
+
+/** Houses with at least one piece in a category, in catalogue order. */
+export function brandsInCategory(slug: string) {
+  const held = new Set(productsInCategory(slug).map((p) => p.brand));
+  return brands.filter((b) => held.has(b.slug));
+}
+
+/** Categories a house has pieces in, in catalogue order. */
+export function categoriesForBrand(slug: string) {
+  const held = new Set(productsByBrand(slug).map((p) => p.category));
+  return categories.filter((c) => held.has(c.slug));
 }
 
 export function countIn(category: string, sub?: string) {

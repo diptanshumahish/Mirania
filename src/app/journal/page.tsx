@@ -88,16 +88,11 @@ export default function JournalIndex() {
       />
 
       <header className="phead">
-        <p className="mono-sm muted">Index / The Grain</p>
-        <div className="phead__row">
-          <h1 className="h1 balance">The Grain</h1>
-          <p className="mono-sm muted">
-            {entries.length} issues · since {entries[entries.length - 1].date.slice(0, 4)}
-          </p>
-        </div>
+        <p className="mono-sm muted">Journal</p>
+        <h1 className="h1 balance">The Grain</h1>
         <p className="t-lg phead__lede">
-          Notes from the floor — what we specify, why, and what it does to a room
-          ten years on.
+          Notes from the showroom floor: what we specify, why, and how a room
+          holds up ten years on.
         </p>
       </header>
 
@@ -116,8 +111,7 @@ export default function JournalIndex() {
           />
           <div className="split--sidebar split">
             <div className="jlead__rail">
-              <span className="mono-sm muted">Latest issue</span>
-              <span className="mono">{lead.number}</span>
+              <span className="mono-sm muted">Latest</span>
               <span className="mono-sm muted">
                 <time dateTime={lead.date}>{lead.dateLabel}</time>
               </span>
@@ -126,7 +120,7 @@ export default function JournalIndex() {
               <h2 className="h2 balance">{lead.title}</h2>
               <p className="t-lg muted">{lead.standfirst}</p>
               <span className="mono arrow-link">
-                Read this issue <Arrow className="arrow" />
+                Read <Arrow className="arrow" />
               </span>
             </div>
           </div>
@@ -138,13 +132,11 @@ export default function JournalIndex() {
       <section className="block-pad" style={{ paddingTop: "3.2rem" }}>
         <div className="sec-head">
           <div className="sec-head__title">
-            <h2 className="h3">Back issues</h2>
-            <span className="counter sec-head__count">{rest.length}</span>
+            <h2 className="h3">Earlier notes</h2>
           </div>
           <p className="t-lg muted sec-head__desc">
-            Every issue is written from the floor — the specification
-            conversations we have with clients, set down while they are still
-            fresh.
+            Written from the floor, from the conversations we have with
+            clients while a room is being planned.
           </p>
         </div>
 

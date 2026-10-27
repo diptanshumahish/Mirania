@@ -20,7 +20,6 @@ export default function JournalRow({
       href={`/journal/${entry.slug}`}
       className={`jrow zoom-parent ${compact ? "is-compact" : ""}`}
     >
-      <span className="mono jrow__n">{entry.number}</span>
       <span className="mono-sm muted jrow__date">
         <time dateTime={entry.date}>{entry.dateLabel}</time>
       </span>
@@ -28,7 +27,7 @@ export default function JournalRow({
         <h3 className={`${compact ? "h5" : "h4"} jrow__title balance`}>{entry.title}</h3>
         <p className="t-base muted">{entry.standfirst}</p>
         <span className="mono-sm arrow-link">
-          Read issue <Arrow className="arrow" />
+          Read <Arrow className="arrow" />
         </span>
       </div>
       {!compact && (

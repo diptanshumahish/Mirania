@@ -206,7 +206,7 @@ export default async function JournalEntry({ params }: { params: Promise<Params>
               “{e.pullQuote}”
             </blockquote>
             <p className="mono-sm muted" style={{ marginTop: "2.4rem" }}>
-              {e.number} — {e.title}
+              {e.title}
             </p>
           </div>
         </section>
@@ -218,28 +218,26 @@ export default async function JournalEntry({ params }: { params: Promise<Params>
           {older ? (
             <Link href={`/journal/${older.slug}`} className="jpager__cell">
               <span className="mono-sm muted arrow-link is-back">
-                <Arrow className="arrow" /> Previous issue · {older.number}
+                <Arrow className="arrow" /> Previous
               </span>
               <span className="h5 balance">{older.title}</span>
             </Link>
           ) : (
             <div className="jpager__cell">
-              <span className="mono-sm muted">First issue</span>
-              <span className="t-base muted">The column starts here.</span>
+              <span className="mono-sm muted">First note</span>
             </div>
           )}
 
           {newer ? (
             <Link href={`/journal/${newer.slug}`} className="jpager__cell is-next">
               <span className="mono-sm muted arrow-link">
-                Next issue · {newer.number} <Arrow className="arrow" />
+                Next <Arrow className="arrow" />
               </span>
               <span className="h5 balance">{newer.title}</span>
             </Link>
           ) : (
             <div className="jpager__cell is-next">
-              <span className="mono-sm muted">Latest issue</span>
-              <span className="t-base muted">You are up to date.</span>
+              <span className="mono-sm muted">Latest note</span>
             </div>
           )}
         </div>
@@ -248,11 +246,10 @@ export default async function JournalEntry({ params }: { params: Promise<Params>
       <section className="block-pad" style={{ paddingTop: "3.2rem", paddingBottom: "6.4rem" }}>
         <div className="sec-head">
           <div className="sec-head__title">
-            <h2 className="h3">The full column</h2>
-            <span className="counter sec-head__count">{others.length}</span>
+            <h2 className="h3">More from the journal</h2>
           </div>
           <Link href="/journal" className="mono arrow-link">
-            All issues <Arrow className="arrow" />
+            All notes <Arrow className="arrow" />
           </Link>
         </div>
         <div className="jarchive">

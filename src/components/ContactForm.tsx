@@ -62,7 +62,7 @@ export default function ContactForm() {
           id="f-message"
           value={f.message}
           onChange={set("message")}
-          placeholder="A room, a floor, an office — and roughly when."
+          placeholder="A room, a floor or an office, and roughly when."
         />
       </div>
 

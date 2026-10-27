@@ -132,18 +132,14 @@ export default async function BrandPage({ params }: { params: Promise<Params> })
       <header className="phead">
         <p className="mono-sm muted phead__crumbs">
           <Link href="/brands" className="link-u">
-            Houses
+            Brands
           </Link>
           <span aria-hidden="true">/</span>
           <span>{b.name}</span>
         </p>
-        <div className="phead__row">
-          <h1 className="h1 balance">{b.name}</h1>
-          <p className="mono-sm muted">
-            {b.origin} · {items.length} pieces
-          </p>
-        </div>
+        <h1 className="h1 balance">{b.name}</h1>
         <p className="t-lg phead__lede">{b.blurb}</p>
+        <p className="mono-sm muted">{b.origin}</p>
       </header>
 
       <hr className="rule" />
@@ -172,7 +168,7 @@ export default async function BrandPage({ params }: { params: Promise<Params> })
             <div className="stack" style={{ gap: "2rem" }}>
               <p className="t-lg">
                 Our floor carries a fraction of what each house makes. Send us a
-                model name, a photograph or a mood — we will source it and quote
+                model name, a photograph or a mood, and we will source it and quote
                 it, delivered and installed.
               </p>
               <div className="row" style={{ gap: "1.2rem", flexWrap: "wrap" }}>
@@ -190,7 +186,7 @@ export default async function BrandPage({ params }: { params: Promise<Params> })
 
       <section className="block-pad" style={{ paddingTop: "4.8rem", paddingBottom: "6.4rem" }}>
         <Link href={`/brands/${next.slug}`} className="stack" style={{ gap: "1.2rem" }}>
-          <span className="mono-sm muted">Next house</span>
+          <span className="mono-sm muted">Next brand</span>
           <span className="h2 arrow-link">
             {next.name} <Arrow className="arrow" />
           </span>

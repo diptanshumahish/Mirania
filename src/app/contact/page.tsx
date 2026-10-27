@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
-import Media from "@/components/Media";
 import { Arrow } from "@/components/Logo";
 import { contact } from "@/data/site";
 import {
@@ -26,7 +25,7 @@ export const metadata: Metadata = {
     url: canonical(PATH),
     images: [
       {
-        url: "/img/site/fabric-mockup.jpg",
+        url: "/img/site/slider03.jpg",
         width: 1920,
         height: 1280,
         alt: "Fabric and finish samples at the Mirania showroom",
@@ -75,10 +74,8 @@ export default function ContactPage() {
         ]}
       />
       <header className="phead">
-        <p className="mono-sm muted">Index / Contact</p>
-        <div className="phead__row">
-          <h1 className="h1 balance">Come and sit in it.</h1>
-        </div>
+        <p className="mono-sm muted">Contact</p>
+        <h1 className="h1 balance">Visit the showroom.</h1>
         <p className="t-lg phead__lede">
           The showroom is on East Topsia Road, ten minutes from the EM Bypass.
           Walk in, or tell us what you are furnishing and we will have the right
@@ -92,7 +89,7 @@ export default function ContactPage() {
         <div className="split">
           <div className="stack">
             <h2 className="h4" style={{ marginBottom: "2.4rem" }}>
-              Visit the showroom
+              Showroom details
             </h2>
             <div className="deflist deflist--tight">
               <div className="deflist__row">
@@ -113,7 +110,7 @@ export default function ContactPage() {
                 <div className="stack" style={{ gap: "0.4rem" }}>
                   {contact.hours.map((h) => (
                     <p className="t-md" key={h.days}>
-                      {h.days} — <span className="muted">{h.time}</span>
+                      {h.days}, <span className="muted">{h.time}</span>
                     </p>
                   ))}
                 </div>
@@ -152,7 +149,7 @@ export default function ContactPage() {
               target="_blank"
               rel="noreferrer"
               className="btn arrow-link"
-              style={{ alignSelf: "flex-start", marginTop: "3.2rem" }}
+              style={{ alignSelf: "flex-start", marginTop: "3.2rem", marginBottom: "4.8rem" }}
             >
               Get directions <Arrow className="arrow" />
             </a>
@@ -172,17 +169,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="block-pad" style={{ paddingTop: "4.8rem", paddingBottom: "6.4rem" }}>
-        <Media
-          src="/img/site/fabric-mockup.jpg"
-          alt="Fabric and finish samples at the Mirania showroom"
-          ratio={16 / 6}
-          sizes="100vw"
-        />
-        <p className="mono-sm muted" style={{ paddingTop: "1.2rem" }}>
-          Finish and fabric library · available on the floor
-        </p>
-      </section>
     </>
   );
 }

@@ -24,11 +24,11 @@ export const contact = {
   whatsappNumber: "919831913000",
   address: {
     name: "K3N Lifestyles",
-    lines: ["#3 Mirania Gardens", "11F East Topsia Road", "Kolkata — 700 046", "West Bengal, India"],
+    lines: ["#3 Mirania Gardens", "11F East Topsia Road", "Kolkata 700 046", "West Bengal, India"],
   },
   hours: [
-    { days: "Monday — Friday", time: "10:00 — 19:30" },
-    { days: "Saturday", time: "10:00 — 19:30" },
+    { days: "Monday to Friday", time: "10:00 to 19:30" },
+    { days: "Saturday", time: "10:00 to 19:30" },
     { days: "Sunday", time: "Closed" },
   ],
   /** 24h local opening window used by the live "open now" indicator. */
@@ -41,12 +41,12 @@ export const contact = {
 } as const;
 
 export const nav = [
+  { label: "About", href: "/about" },
   { label: "Collections", href: "/collections" },
   { label: "Brands", href: "/brands" },
-  { label: "About", href: "/about" },
-  { label: "Journal", href: "/journal" },
   { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/contact" },
+  { label: "Journal", href: "/journal" },
 ] as const;
 
 export const about = {

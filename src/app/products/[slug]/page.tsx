@@ -246,7 +246,7 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
           <aside className="pdp__side">
             <div className="stack" style={{ gap: "1.2rem" }}>
               {brand && (
-                <Link href={`/brands/${brand.slug}`} className="tag">
+                <Link href={`/brands/${brand.slug}`} className="mono-sm muted link-u" style={{ alignSelf: "flex-start" }}>
                   {brand.name}
                 </Link>
               )}
@@ -288,15 +288,11 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
                   confirmed at enquiry.
                 </span>
               </div>
-              <div className="deflist__row">
-                <span className="mono-sm muted">Reference</span>
-                <span className="t-base mono-sm">{p.slug}</span>
-              </div>
             </div>
 
             <p className="t-md muted">
               Upholstery, timber and metal options vary by piece. Tell us the
-              room and we will come back with the specification that fits it —
+              room and we will come back with the specification that fits it,
               and what it costs, delivered and installed.
             </p>
 

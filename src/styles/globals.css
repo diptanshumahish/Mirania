@@ -1,6 +1,8 @@
 /* ==========================================================================
    Mirania — design system
-   Editorial, grid-ruled, warm-neutral. Fluid rem scale: 1rem ≈ 10px @1440.
+   Warm, earthy, classic. A Garamond display face over a quiet sans, ivory
+   paper, espresso ink, with terracotta and deep forest as the colour notes.
+   Fluid rem scale: 1rem ≈ 10px @1440.
    ========================================================================== */
 
 @font-face {
@@ -32,6 +34,41 @@
   font-display: swap;
 }
 @font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-400i.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/CormorantGaramond-500i.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
   font-family: "Geist Mono";
   src: url("/fonts/GeistMono.woff2") format("woff2");
   font-weight: 400 600;
@@ -40,25 +77,33 @@
 }
 
 :root {
-  /* Palette — warm neutrals with a single burnt-orange accent */
-  --ink: #101010;
-  --ink-60: rgba(16, 16, 16, 0.6);
-  --ink-40: rgba(16, 16, 16, 0.4);
-  --rule: rgba(16, 16, 16, 0.16);
-  --paper: #fcfaf2;
-  --paper-warm: #f3f0e4;
-  --sage: #dfddc7;
-  --clay: #d7caa9;
-  --accent: #bf551a;
-  --white: #ffffff;
-  --grey: #f4f4f4;
+  /* Palette — earthy neutrals; terracotta and forest are the colour notes */
+  --ink: #221c16;
+  --ink-60: rgba(34, 28, 22, 0.64);
+  --ink-40: rgba(34, 28, 22, 0.42);
+  --rule: rgba(34, 28, 22, 0.14);
+  --paper: #f7f2e8;
+  --paper-60: rgba(247, 242, 232, 0.66);
+  --paper-warm: #efe7d8;
+  --sage: #dedbc8;
+  --clay: #d9c7a7;
+  --sand: #e9dfcc;
+  --forest: #26302a;
+  --accent: #a64b2a;
+  --brass: #b08d57;
+  --white: #fffdf8;
+  --grey: #f2eee6;
 
+  --font-serif: "Cormorant Garamond", "Cormorant", Garamond, "Times New Roman", serif;
   --font-sans: "Switzer", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --gutter: 4.8rem;
   --ease: cubic-bezier(0.215, 0.61, 0.355, 1);
-  --nav-h: 7.4rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --nav-h: 8.8rem;
+  /* Room the floating bar takes from the top of the page. */
+  --nav-space: calc(var(--nav-h) + 2.4rem);
 }
 
 /* Fluid root: 1rem = 10px at 1440px, scales with viewport, locks at 10px ≤991px */
@@ -108,44 +153,49 @@ input, textarea, select { font: inherit; color: inherit; }
    Typography
    -------------------------------------------------------------------------- */
 
-h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; }
+h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 400; }
 p { margin: 0; }
 
+/* Display type is set in Garamond. Its small x-height wants more size and
+   less negative tracking than the old grotesk did. */
+.h-display, .h1, .h2, .h3, .h4, .h5, .serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+.h-display em, .h1 em, .h2 em, .h3 em, .h4 em, .h5 em, .serif em, .pullquote em {
+  font-style: italic;
+}
+
 .h-display {
-  font-size: 13.8rem;
-  line-height: 0.92;
-  letter-spacing: -0.05em;
-  font-weight: 500;
-  margin-left: -0.7rem;
+  font-size: 15.6rem;
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+  margin-left: -0.6rem;
 }
 .h1 {
-  font-size: 12.2rem;
-  line-height: 1.02;
-  letter-spacing: -0.045em;
-  font-weight: 500;
+  font-size: 11.2rem;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
 }
 .h2 {
-  font-size: 6.8rem;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  font-weight: 500;
+  font-size: 7.2rem;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
 }
 .h3 {
-  font-size: 5.2rem;
-  line-height: 1.06;
-  letter-spacing: -0.025em;
-  font-weight: 500;
+  font-size: 5.4rem;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
 }
 .h4 {
-  font-size: 3rem;
+  font-size: 3.4rem;
   line-height: 1.12;
-  letter-spacing: -0.015em;
-  font-weight: 500;
+  letter-spacing: -0.005em;
 }
 .h5 {
-  font-size: 2.5rem;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  font-size: 2.8rem;
+  line-height: 1.15;
+  letter-spacing: 0;
   font-weight: 500;
 }
 
@@ -154,34 +204,47 @@ p { margin: 0; }
 .t-base { font-size: 1.6rem; line-height: 1.45; }
 .t-sm { font-size: 1.4rem; line-height: 1.35; }
 
+/* Labels. Kept under their old names so every page picks up the change; they
+   are now quiet sentence-case sans rather than a monospace. House rule: never
+   uppercase and letter-spacing together. */
 .mono {
-  font-family: var(--font-mono);
-  font-size: 1.3rem;
-  font-weight: 400;
+  font-family: var(--font-sans);
+  font-size: 1.4rem;
+  font-weight: 500;
   letter-spacing: 0;
 }
-.mono-sm { font-family: var(--font-mono); font-size: 1.1rem; letter-spacing: 0; }
-.mono-lg { font-family: var(--font-mono); font-size: 1.4rem; letter-spacing: 0; }
+.mono-sm {
+  font-family: var(--font-sans);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.mono-lg {
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
 
 .muted { color: var(--ink-60); }
 .balance { text-wrap: balance; }
 
 @media screen and (max-width: 991px) {
-  .h-display { font-size: 6.4rem; margin-left: -0.3rem; letter-spacing: -0.035em; }
-  .h1 { font-size: 5.6rem; letter-spacing: -0.03em; }
-  .h2 { font-size: 4.2rem; }
-  .h3 { font-size: 3.2rem; }
-  .h4 { font-size: 2.4rem; }
-  .h5 { font-size: 2rem; }
+  .h-display { font-size: 7.6rem; margin-left: -0.3rem; }
+  .h1 { font-size: 6.4rem; }
+  .h2 { font-size: 4.8rem; }
+  .h3 { font-size: 3.6rem; }
+  .h4 { font-size: 2.8rem; }
+  .h5 { font-size: 2.4rem; }
   .t-lg { font-size: 1.7rem; }
   .t-md { font-size: 1.6rem; }
-  .mono { font-size: 1.2rem; }
+  .mono { font-size: 1.35rem; }
 }
 @media screen and (max-width: 560px) {
-  .h-display { font-size: 4.6rem; }
-  .h1 { font-size: 4rem; }
-  .h2 { font-size: 3.2rem; }
-  .h3 { font-size: 2.6rem; }
+  .h-display { font-size: 5.6rem; }
+  .h1 { font-size: 4.8rem; }
+  .h2 { font-size: 3.8rem; }
+  .h3 { font-size: 3rem; }
 }
 
 /* --------------------------------------------------------------------------
@@ -236,11 +299,12 @@ p { margin: 0; }
   gap: 0.6rem;
   height: 2.4rem;
   padding: 0 0.8rem;
-  border: 1px solid var(--ink);
-  border-radius: 4px;
-  background: var(--white);
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 500;
   letter-spacing: 0;
   white-space: nowrap;
 }
@@ -253,12 +317,13 @@ p { margin: 0; }
   justify-content: center;
   min-width: 2.2rem;
   padding: 0 0.5rem;
-  border: 1px solid var(--ink);
-  border-radius: 0.4em;
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  line-height: 1.7;
-  letter-spacing: 0;
+  border: 1px solid var(--ink-40);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.9;
+  letter-spacing: 0.06em;
 }
 
 .dot {
@@ -268,10 +333,10 @@ p { margin: 0; }
   border-radius: 999px;
   background: var(--ink);
 }
-.dot.is-live { background: #2f7d4f; }
+.dot.is-live { background: #5c8a5a; box-shadow: 0 0 0 0.3rem rgba(92, 138, 90, 0.22); }
 .dot.is-closed { background: var(--ink-40); }
 
-.rounded { border-radius: 0.8rem; overflow: hidden; }
+.rounded { border-radius: 0.2rem; overflow: hidden; }
 
 .link-u {
   display: inline-block;
@@ -298,20 +363,26 @@ p { margin: 0; }
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  height: 4.8rem;
-  padding: 0 2.2rem;
+  height: 5.2rem;
+  padding: 0 2.8rem;
   border: 1px solid var(--ink);
   border-radius: 999px;
   background: var(--ink);
   color: var(--paper);
-  font-family: var(--font-mono);
-  font-size: 1.2rem;
+  font-family: var(--font-sans);
+  font-size: 1.45rem;
+  font-weight: 500;
   letter-spacing: 0;
   transition: background 0.3s var(--ease), color 0.3s var(--ease);
 }
 .btn:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
 .btn.is-ghost { background: transparent; color: var(--ink); }
 .btn.is-ghost:hover { background: var(--ink); color: var(--paper); }
+/* On dark grounds and over photography. */
+.btn.is-light { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.btn.is-light:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.btn.is-ghost-light { background: transparent; border-color: rgba(247, 242, 232, 0.6); color: var(--paper); }
+.btn.is-ghost-light:hover { background: var(--paper); border-color: var(--paper); color: var(--ink); }
 
 /* --------------------------------------------------------------------------
    Media
@@ -327,7 +398,9 @@ p { margin: 0; }
   height: 100%;
   object-fit: cover;
 }
-.media.is-contain { background: transparent; }
+/* Product plates sit on one uniform warm tile, so studio shots on white and
+   on grey read as a set rather than a patchwork. */
+.media.is-contain { background: var(--white); }
 .media.is-contain img {
   object-fit: contain;
   /* Product photography ships on white; multiply drops that ground into the
@@ -335,9 +408,9 @@ p { margin: 0; }
   mix-blend-mode: multiply;
 }
 
-.zoom img { transition: transform 0.7s var(--ease); }
+.zoom img { transition: transform 1.2s var(--ease-out); }
 a:hover .zoom img,
-.zoom-parent:hover .zoom img { transform: scale(1.035); }
+.zoom-parent:hover .zoom img { transform: scale(1.04); }
 
 /* Utility */
 .sr-only {

@@ -48,22 +48,25 @@ export default function StudioClock({ compact = false }: { compact?: boolean }) 
 
   return (
     <div className="clock">
+      {/* Open/closed status is switched off for now. To bring it back,
+          restore this dot and the "Open now" line below.
       <span
         className={`dot ${status ? (status.open ? "is-live" : "is-closed") : "is-closed"}`}
         aria-hidden="true"
       />
+      */}
       <p className="mono-sm clock__text">
         <span suppressHydrationWarning>{status?.time ?? "--:--"}</span> IST
         <br />
         {site.city}
-        {!compact && (
+        {/* {!compact && (
           <>
             <br />
             <span className="muted">
               {status ? (status.open ? "Open now" : "Closed") : " "}
             </span>
           </>
-        )}
+        )} */}
       </p>
     </div>
   );

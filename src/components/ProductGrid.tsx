@@ -5,7 +5,7 @@ export default function ProductGrid({ items }: { items: Product[] }) {
   if (!items.length) {
     return (
       <p className="t-lg muted" style={{ padding: "6rem 0" }}>
-        Nothing catalogued here yet. Speak to the showroom — much of what we hold
+        Nothing catalogued here yet. Speak to the showroom; much of what we hold
         never makes it online.
       </p>
     );

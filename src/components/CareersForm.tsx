@@ -73,7 +73,7 @@ export default function CareersForm() {
           }}
           tabIndex={0}
         >
-          <span className="t-base">{file ? file.name : "Choose your CV — PDF or DOC"}</span>
+          <span className="t-base">{file ? file.name : "Attach your CV (PDF or DOC)"}</span>
           <span className="mono-sm muted">{file ? "Change" : "Browse"}</span>
           <input
             ref={inputRef}
@@ -86,15 +86,10 @@ export default function CareersForm() {
         </label>
       </div>
 
-      <div className="formnote">
-        <p className="mono-sm muted" style={{ marginBottom: "0.8rem" }}>
-          How this works
-        </p>
-        <p className="t-base">
-          Pressing send opens a pre-filled email to {contact.email}. Attach the
-          CV there and we will read it — the file is never uploaded to this site.
-        </p>
-      </div>
+      <p className="t-sm muted">
+        Sending opens a pre-filled email to {contact.email}. Please attach your
+        CV there; nothing is uploaded to this site.
+      </p>
 
       <a href={mailto()} className="btn arrow-link" style={{ alignSelf: "flex-start" }}>
         Send application <Arrow className="arrow" />

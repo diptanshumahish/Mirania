@@ -143,13 +143,7 @@ export default async function CategoryPage({
             <span>{c.name}</span>
           )}
         </p>
-        <div className="phead__row">
-          <h1 className="h1 balance">{label}</h1>
-          <p className="mono-sm muted">
-            {items.length} {items.length === 1 ? "piece" : "pieces"}
-            {active ? ` of ${all.length}` : ""}
-          </p>
-        </div>
+        <h1 className="h1 balance">{label}</h1>
         <p className="t-lg phead__lede">{c.blurb}</p>
       </header>
 

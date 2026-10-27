@@ -68,14 +68,11 @@ export default function CareersPage() {
         ]}
       />
       <header className="phead">
-        <p className="mono-sm muted">Index / Careers</p>
-        <div className="phead__row">
-          <h1 className="h1 balance">We are hiring.</h1>
-          <span className="tag">Open roles</span>
-        </div>
+        <p className="mono-sm muted">Careers</p>
+        <h1 className="h1 balance">Work with us.</h1>
         <p className="t-lg phead__lede">
           If you care about how a room comes together and can hold a client's
-          trust across months, we would like to read your CV — whether or not a
+          trust across months, we would like to read your CV, whether or not a
           role is posted.
         </p>
       </header>
@@ -112,7 +109,7 @@ export default function CareersPage() {
         <div className="block-pad" style={{ paddingTop: "6.4rem", paddingBottom: "8rem" }}>
           <div className="split">
             <div className="stack" style={{ gap: "1.6rem" }}>
-              <h2 className="h2 balance">Drop your resume here.</h2>
+              <h2 className="h2 balance">Send us your CV.</h2>
               <p className="t-lg muted" style={{ maxWidth: "42rem" }}>
                 Or write to us directly at{" "}
                 <a href={`mailto:${contact.email}`} className="link-u">

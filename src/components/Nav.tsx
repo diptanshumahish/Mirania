@@ -9,9 +9,20 @@ import StudioClock from "./StudioClock";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  // The homepage opens on a full-bleed photograph; until the visitor scrolls
+  // the bar sits on it with no ground of its own.
+  const overHero = pathname === "/" && !scrolled && !open;
 
   useEffect(() => setOpen(false), [pathname]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     document.documentElement.style.overflow = open ? "hidden" : "";
@@ -27,7 +38,9 @@ export default function Nav() {
   }, []);
 
   return (
-    <header className={`nav ${open ? "is-open" : ""}`}>
+    <header
+      className={`nav ${open ? "is-open" : ""} ${scrolled ? "is-scrolled" : ""} ${overHero ? "is-over" : ""}`}
+    >
       <div className="nav__bar">
         <Link href="/" className="nav__brand" aria-label="Mirania Furniture — home">
           <Lockup />
@@ -35,13 +48,6 @@ export default function Nav() {
 
         <div className="nav__meta hide-mobile">
           <StudioClock />
-          <p className="mono-sm nav__meta-line">
-            Est. 2003
-            <br />
-            Kolkata, IN
-            <br />
-            <span className="muted">Multi-designer</span>
-          </p>
         </div>
 
         <nav className="nav__links hide-mobile" aria-label="Primary">

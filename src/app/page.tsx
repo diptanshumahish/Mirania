@@ -2,14 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Media from "@/components/Media";
 import Reveal from "@/components/Reveal";
-import SectionHead from "@/components/SectionHead";
-import { Arrow, Mark } from "@/components/Logo";
+import { Arrow } from "@/components/Logo";
+import HouseIndex from "@/components/HouseIndex";
 import Intro from "@/components/Intro";
+import ParallaxStage from "@/components/ParallaxStage";
+import PinnedRail from "@/components/PinnedRail";
 import {
   activeCategories,
   brands,
-  COVER_RATIO,
-  pickCover,
+  brandsInCategory,
+  categoriesForBrand,
   products,
   productsInCategory,
 } from "@/data/catalog";
@@ -29,10 +31,10 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     images: [
       {
-        url: "/img/site/slider01.jpg",
+        url: "/img/site/slider03.jpg",
         width: 1920,
         height: 1080,
-        alt: "A Mirania interior — layered seating, timber and soft light",
+        alt: "A tan leather sofa in a dark, arched room with a terracotta canvas",
       },
     ],
   },
@@ -47,7 +49,7 @@ export default function Home() {
         data={[
           webPage("/", `${site.legalName} — Premium Furniture, Kolkata`, DESCRIPTION, {
             type: "CollectionPage",
-            image: "/img/site/slider01.jpg",
+            image: "/img/site/slider03.jpg",
           }),
           itemList(
             "/",
@@ -62,252 +64,293 @@ export default function Home() {
       <Intro />
 
       {/* ---------------------------------------------------------------- */}
-      {/* Hero                                                              */}
+      {/* Hero — the statement photograph                                   */}
       {/* ---------------------------------------------------------------- */}
-      <section className="hero">
-        <Mark className="hero__mark enter" />
-        <div className="hero__bottom">
-          <h1 className="h4 hero__statement balance enter" style={{ "--i": 1 } as React.CSSProperties}>
-            <em>Mirania</em> is a multi-designer furniture boutique in Eastern
-            India, driven to transform spaces into spectacular, comfortable
-            havens.
+      <ParallaxStage>
+        <div className="stage__media">
+          <Media
+            src="/img/site/slider03.jpg"
+            alt="A tan leather sofa in a dark, arched room with a terracotta canvas"
+            ratio={16 / 9}
+            sizes="100vw"
+            priority
+          />
+        </div>
+        <div className="stage__veil" aria-hidden="true" />
+        <div className="stage__content">
+          <p className="mono-sm stage__kicker enter" style={{ "--i": 0 } as React.CSSProperties}>
+            Since {site.founded} · {site.city}
+          </p>
+          <h1 className="h-display stage__title balance enter" style={{ "--i": 1 } as React.CSSProperties}>
+            Rooms that keep <em>their character</em>
           </h1>
-          <div className="hero__facts enter" style={{ "--i": 2 } as React.CSSProperties}>
-            <div>
-              <p className="hero__fact-n">20+</p>
-              <p className="mono-sm muted hero__fact-l">Years on the floor</p>
-            </div>
-            <div>
-              <p className="hero__fact-n">{houses}</p>
-              <p className="mono-sm muted hero__fact-l">Design houses</p>
-            </div>
-            <div>
-              <p className="hero__fact-n">{products.length}</p>
-              <p className="mono-sm muted hero__fact-l">Pieces catalogued</p>
-            </div>
-            <div>
-              <p className="hero__fact-n">1</p>
-              <p className="mono-sm muted hero__fact-l">Showroom, Kolkata</p>
+          <div className="stage__foot enter" style={{ "--i": 2 } as React.CSSProperties}>
+            <p className="t-lg stage__lede">
+              Two decades of the world&rsquo;s finest furniture houses, curated
+              under one roof in Kolkata.
+            </p>
+            <div className="stage__actions">
+              <Link href="/collections" className="btn is-light arrow-link">
+                Explore collections <Arrow className="arrow" />
+              </Link>
+              <Link href="/contact" className="btn is-ghost-light">
+                Visit the showroom
+              </Link>
             </div>
           </div>
         </div>
-      </section>
-
-      <figure className="hero__figure enter" style={{ margin: 0, "--i": 3 } as React.CSSProperties}>
-        <Media
-          src="/img/site/slider01.jpg"
-          alt="A Mirania interior — layered seating, timber and soft light"
-          ratio={16 / 7}
-          sizes="100vw"
-          priority
-        />
-        <figcaption className="hero__caption">
-          <span className="mono-sm muted">Showroom floor · East Topsia Road</span>
-          <span className="mono-sm muted">Kolkata, IN</span>
-        </figcaption>
-      </figure>
+      </ParallaxStage>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Collections                                                       */}
+      {/* Legacy                                                            */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section--sage" id="collections">
-        <div className="block-pad" style={{ paddingTop: "6.4rem", paddingBottom: "6.4rem" }}>
-          <SectionHead title="Collections" count={activeCategories.length}>
-            {activeCategories.length} categories, drawn from {houses} houses. Everything
-            here is specified,
-            delivered and installed by the same people who sell it — the reason a
-            piece looks the way it did on the floor once it reaches the room.
-          </SectionHead>
-          <hr className="rule-dotted" />
-
-          {activeCategories.map((c, i) => {
-            const count = productsInCategory(c.slug).length;
-            return (
-              <div key={c.slug}>
-                <Reveal>
-                  <Link
-                    href={`/collections/${c.slug}`}
-                    className={`crow zoom-parent ${i % 2 === 1 ? "is-flip" : ""}`}
-                  >
-                    <div className="crow__bio">
-                      <div className="crow__tags">
-                        <span className="mono">
-                          ({String(i + 1).padStart(2, "0")})
-                        </span>
-                        <span className="mono-sm muted">{count} pieces</span>
-                      </div>
-                      <div className="crow__body">
-                        <h3 className="h3">{c.name}</h3>
-                        <p className="t-lg">{c.blurb}</p>
-                        <span className="mono arrow-link">
-                          View collection <Arrow className="arrow" />
-                        </span>
-                      </div>
-                    </div>
-                    <div className="crow__img">
-                      <Media
-                        src={pickCover(c.slug, i * 7)}
-                        alt={c.name}
-                        ratio={COVER_RATIO}
-                        sizes="(max-width: 991px) 100vw, 50vw"
-                        contain
-                        zoom
-                      />
-                    </div>
-                  </Link>
-                </Reveal>
-                <hr className="rule-dotted" />
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------------------- */}
-      {/* Ticker                                                            */}
-      {/* ---------------------------------------------------------------- */}
-      <div className="ticker" aria-hidden="true">
-        <div className="ticker__track">
-          {brands.map((b) => (
-            <span key={b.slug} className="ticker__item">
-              {b.name}
-            </span>
-          ))}
-        </div>
-        <div className="ticker__track">
-          {brands.map((b) => (
-            <span key={`${b.slug}-2`} className="ticker__item">
-              {b.name}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ---------------------------------------------------------------- */}
-      {/* Houses                                                            */}
-      {/* ---------------------------------------------------------------- */}
-      <section className="block-pad" style={{ paddingTop: "6.4rem", paddingBottom: "6.4rem" }}>
-        <SectionHead title="Houses" count={houses}>
-          As a multi-designer store we carry globally renowned makers under one
-          roof — Danish upholstery, Spanish contract seating, American workplace
-          research and Dutch light control, side by side.
-        </SectionHead>
-
-        <ul className="bgrid">
-          {brands.map((b, i) => (
-            <Reveal as="li" key={b.slug} delay={(i % 3) * 70}>
-              <Link href={`/brands/${b.slug}`} className="bcard">
-                <div className="bcard__head">
-                  <h3 className="h5">{b.name}</h3>
-                  <span className="mono-sm muted">{b.origin}</span>
-                </div>
-                <p className="t-base muted bcard__blurb">{b.blurb}</p>
-                <div className="bcard__foot">
-                  <span className="mono-sm arrow-link">
-                    View house <Arrow className="arrow" />
-                  </span>
-                </div>
-              </Link>
-            </Reveal>
-          ))}
-        </ul>
-      </section>
-
-      {/* ---------------------------------------------------------------- */}
-      {/* Philosophy                                                        */}
-      {/* ---------------------------------------------------------------- */}
-      <section className="section--clay">
-        <div className="block-pad" style={{ paddingTop: "8rem", paddingBottom: "8rem" }}>
-          <Reveal>
-            <p className="mono-sm muted" style={{ marginBottom: "3.2rem" }}>
-              Our approach
+      <section className="legacy block-pad">
+        <Reveal className="legacy__grid">
+          <p className="mono-sm muted legacy__label">The house of Mirania</p>
+          <div className="legacy__body">
+            <p className="h3 balance legacy__statement">
+              A multi-designer furniture boutique in Eastern India, driven to
+              transform spaces into spectacular, comfortable havens.
             </p>
-            <blockquote className="pullquote balance" style={{ margin: 0 }}>
-              “{about.pullQuote}”
-            </blockquote>
-            <div className="stat-row" style={{ marginTop: "6.4rem" }}>
+            <div className="legacy__facts">
               <div>
-                <p className="stat__n">20+</p>
-                <p className="mono-sm stat__l">Years of practice</p>
+                <p className="legacy__n">20+</p>
+                <p className="mono-sm muted">Years on the floor</p>
               </div>
               <div>
-                <p className="stat__n">3</p>
-                <p className="mono-sm stat__l">Sectors served</p>
+                <p className="legacy__n">{houses}</p>
+                <p className="mono-sm muted">Design houses</p>
               </div>
               <div>
-                <p className="stat__n">{products.length}</p>
-                <p className="mono-sm stat__l">Pieces on record</p>
+                <p className="legacy__n">{products.length}</p>
+                <p className="mono-sm muted">Pieces catalogued</p>
               </div>
               <div>
-                <p className="stat__n">1</p>
-                <p className="mono-sm stat__l">Family, by our count</p>
+                <p className="legacy__n">3</p>
+                <p className="mono-sm muted">Homes · Offices · Hospitality</p>
               </div>
             </div>
-            <Link href="/about" className="btn is-ghost arrow-link" style={{ marginTop: "4.8rem" }}>
-              Read about us <Arrow className="arrow" />
-            </Link>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* ---------------------------------------------------------------- */}
-      {/* Visit                                                             */}
+      {/* Collections — sideways                                            */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section--ink">
-        <div className="block-pad" style={{ paddingTop: "8rem", paddingBottom: "8rem" }}>
-          <div className="split">
-            <div className="stack" style={{ gap: "2.4rem" }}>
-              <p className="mono-sm muted">Visit</p>
-              <h2 className="h2 balance">
-                Furniture is a room decision. Come make it in the room.
-              </h2>
-              <p className="t-lg" style={{ maxWidth: "48rem" }}>
-                Sit in it, feel the weight of the arm, see the fabric under
-                Kolkata light. Our floor is set up so you can — and our team can
-                specify the rest around it.
-              </p>
-              <div className="row" style={{ gap: "1.2rem", flexWrap: "wrap", marginTop: "1.6rem" }}>
-                <Link href="/contact" className="btn is-ghost arrow-link" style={{ borderColor: "var(--paper)", color: "var(--paper)" }}>
-                  Book a visit <Arrow className="arrow" />
+      <PinnedRail
+        label="Collections"
+        id="collections"
+        className="section--sand collections-band"
+        head={
+        <div className="pad-x band-head">
+          <div className="stack" style={{ gap: "1.6rem" }}>
+            <p className="mono-sm muted">Collections</p>
+            <h2 className="h2 balance">Sorted the way a room gets built.</h2>
+          </div>
+          <div className="band-head__side">
+            <p className="t-md muted">
+              Drawn from {houses} houses, every piece is specified, delivered
+              and installed by the people who sold it to you.
+            </p>
+            <Link href="/collections" className="mono arrow-link link-u">
+              All collections <Arrow className="arrow" />
+            </Link>
+          </div>
+        </div>
+        }
+      >
+          {activeCategories.map((c, i) => {
+            const count = productsInCategory(c.slug).length;
+            const makers = brandsInCategory(c.slug);
+            return (
+              <li key={c.slug} className="ccard">
+                <Link href={`/collections/${c.slug}`} className="ccard__link zoom-parent" draggable={false}>
+                  <Media
+                    src={c.cover}
+                    alt={c.name}
+                    ratio={4 / 5}
+                    sizes="(max-width: 700px) 80vw, 34vw"
+                    zoom
+                  />
+                  <div className="ccard__meta">
+                    <div className="ccard__row">
+                      <h3 className="h4">{c.name}</h3>
+                      <span className="mono-sm muted">{count} pieces</span>
+                    </div>
+                    <p className="t-base muted ccard__blurb">{c.blurb}</p>
+                    {makers.length > 0 && (
+                      <p className="mono-sm ccard__houses">
+                        {makers.slice(0, 3).map((b) => b.name).join(" · ")}
+                        {makers.length > 3 && ` & ${makers.length - 3} more`}
+                      </p>
+                    )}
+                  </div>
                 </Link>
-                <a
-                  href={contact.whatsapp}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn is-ghost"
-                  style={{ borderColor: "var(--paper)", color: "var(--paper)" }}
+              </li>
+            );
+          })}
+          <li className="ccard ccard--end">
+            <Link href="/collections" className="ccard__end" draggable={false}>
+              <span className="h4">See every collection</span>
+              <span className="mono arrow-link">
+                {products.length} pieces <Arrow className="arrow" />
+              </span>
+            </Link>
+          </li>
+      </PinnedRail>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Brands we house                                                   */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="houses">
+        <div className="pad-x band-head">
+          <div className="stack" style={{ gap: "1.6rem" }}>
+            <p className="mono-sm muted">Brands we house</p>
+            <h2 className="h2 balance">The world&rsquo;s houses, under one roof.</h2>
+          </div>
+          <div className="band-head__side">
+            <p className="t-md muted">
+              Danish upholstery, Spanish contract seating, American workplace
+              research and Dutch light control, each chosen for what it does
+              best.
+            </p>
+            <Link href="/brands" className="mono arrow-link link-u">
+              All brands <Arrow className="arrow" />
+            </Link>
+          </div>
+        </div>
+
+        <HouseIndex>
+          <div className="houses__panel" aria-hidden="true">
+            <div className="houses__frame">
+              {brands.map((b, i) => (
+                <div
+                  key={b.slug}
+                  data-house={b.slug}
+                  className={`houses__plate ${i === 0 ? "is-active" : ""}`}
                 >
-                  WhatsApp us
+                  <Media src={b.scene} alt="" ratio={4 / 5} sizes="(max-width: 991px) 0px, 36vw" />
+                </div>
+              ))}
+            </div>
+            <div className="houses__captions">
+              {brands.map((b, i) => (
+                <p
+                  key={b.slug}
+                  data-house={b.slug}
+                  className={`houses__caption ${i === 0 ? "is-active" : ""}`}
+                >
+                  <span className="serif">{b.name}</span>
+                  <span className="mono-sm muted">{b.origin}</span>
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <ol className="houses__list">
+            {brands.map((b, i) => {
+              const cats = categoriesForBrand(b.slug);
+              return (
+                <li key={b.slug}>
+                  <Link
+                    href={`/brands/${b.slug}`}
+                    data-house={b.slug}
+                    className={`houses__row ${i === 0 ? "is-active" : ""}`}
+                  >
+                    <span className="houses__thumb">
+                      <Media src={b.scene} alt="" ratio={1} sizes="96px" />
+                    </span>
+                    <span className="houses__name">
+                      <span className="h3">{b.name}</span>
+                      <span className="t-base muted houses__blurb">{b.blurb}</span>
+                    </span>
+                    <span className="houses__meta">
+                      <span className="mono-sm">{b.origin}</span>
+                      {cats.length > 0 && (
+                        <span className="mono-sm muted">
+                          {cats.slice(0, 2).map((c) => c.name).join(" · ")}
+                        </span>
+                      )}
+                    </span>
+                    <span className="houses__go">
+                      <Arrow />
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </HouseIndex>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* Approach + Visit                                                  */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="section--forest approach">
+        <div className="approach__media">
+          <Media
+            src="/img/site/slider01.jpg"
+            alt="A Mirania interior — layered seating, timber and soft light"
+            ratio={4 / 5}
+            sizes="(max-width: 991px) 100vw, 50vw"
+          />
+        </div>
+
+        <div className="approach__body">
+          <Reveal className="approach__part">
+            <p className="mono-sm muted">Our approach</p>
+            <blockquote className="approach__quote balance">
+              &ldquo;{about.pullQuote}&rdquo;
+            </blockquote>
+            <Link href="/about" className="mono arrow-link link-u">
+              Read our story <Arrow className="arrow" />
+            </Link>
+          </Reveal>
+
+          <hr className="approach__rule" />
+
+          <Reveal className="approach__part">
+            <p className="mono-sm muted">Visit the showroom</p>
+            <h2 className="h2 balance">
+              Furniture is a room decision. Come and make it in the room.
+            </h2>
+            <p className="t-lg approach__lede">
+              Sit in it, feel the weight of the arm, see the fabric under
+              Kolkata light. Our team will specify the rest of the room around
+              it.
+            </p>
+            <div className="deflist deflist--tight">
+              <div className="deflist__row">
+                <span className="mono-sm muted">Address</span>
+                <span className="t-base">
+                  {contact.address.name}, {contact.address.lines.join(", ")}
+                </span>
+              </div>
+              <div className="deflist__row">
+                <span className="mono-sm muted">Hours</span>
+                <span className="t-base">Monday to Saturday, 10:00 to 19:30</span>
+              </div>
+              <div className="deflist__row">
+                <span className="mono-sm muted">Telephone</span>
+                <a href={contact.primaryPhoneHref} className="t-base link-u">
+                  {contact.primaryPhone}
                 </a>
               </div>
             </div>
-            <div className="stack" style={{ gap: "2rem" }}>
-              <Media
-                src="/img/site/home-mockup2.jpg"
-                alt="Mirania showroom"
-                ratio={4 / 3}
-                sizes="(max-width: 991px) 100vw, 50vw"
-              />
-              <div className="deflist">
-                <div className="deflist__row" style={{ borderColor: "rgba(252,250,242,0.2)" }}>
-                  <span className="mono-sm muted">Address</span>
-                  <span className="t-base">
-                    {contact.address.name}, {contact.address.lines.join(", ")}
-                  </span>
-                </div>
-                <div className="deflist__row" style={{ borderColor: "rgba(252,250,242,0.2)" }}>
-                  <span className="mono-sm muted">Hours</span>
-                  <span className="t-base">Mon — Sat, 10:00 to 19:30</span>
-                </div>
-                <div className="deflist__row" style={{ borderColor: "rgba(252,250,242,0.2)" }}>
-                  <span className="mono-sm muted">Telephone</span>
-                  <a href={contact.primaryPhoneHref} className="t-base link-u">
-                    {contact.primaryPhone}
-                  </a>
-                </div>
-              </div>
+            <div className="row" style={{ gap: "1.2rem", flexWrap: "wrap" }}>
+              <Link href="/contact" className="btn is-light arrow-link">
+                Book a visit <Arrow className="arrow" />
+              </Link>
+              <a
+                href={contact.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                className="btn is-ghost-light"
+              >
+                WhatsApp us
+              </a>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </>

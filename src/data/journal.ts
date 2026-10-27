@@ -28,7 +28,7 @@ export const entries: Entry[] = [
     title: "Twenty Years in the Room",
     standfirst:
       "Two decades of furnishing Eastern India, in the words we started with.",
-    image: "/img/site/home-mockup2.jpg",
+    image: "/img/site/about-large-1.jpg",
     body: [...about.history],
     pullQuote: about.pullQuote,
   },
@@ -40,7 +40,7 @@ export const entries: Entry[] = [
     title: "A Multi-Designer House",
     standfirst:
       "Nine houses, five countries, one floor. Why the store is arranged the way it is.",
-    image: "/img/site/slider02.jpg",
+    image: "/img/site/slider01.jpg",
     body: [...about.philosophy],
   },
   {
@@ -50,7 +50,7 @@ export const entries: Entry[] = [
     dateLabel: "09 · MAR · 26",
     title: "What We Are For",
     standfirst: "The vision and the mission, stated plainly and without hedging.",
-    image: "/img/site/prodotti-macro.jpg",
+    image: "/img/site/category-3.jpg",
     body: [about.vision, about.mission],
   },
   {
@@ -60,8 +60,8 @@ export const entries: Entry[] = [
     dateLabel: "14 · NOV · 25",
     title: "The Trick Is in the Hand",
     standfirst:
-      "Leather, boucle, oak, powder-coated steel — the materials we specify most, and what they ask of a room.",
-    image: "/img/site/fabric-mockup.jpg",
+      "Leather, boucle, oak and powder-coated steel: the materials we specify most, and what they ask of a room.",
+    image: "/img/site/category-6.jpg",
     body: [
       "A material is a decision about maintenance as much as it is a decision about looks. Full-grain leather takes a mark and keeps it, and a decade later that record of use is the reason the chair is worth having. A pale boucle does the opposite: it asks to be kept, and rewards a room that can afford to keep it.",
       "Timber behaves the same way. Solid oak and walnut move with the season, which is exactly what a veneered panel is engineered not to do. Neither is better. One is a surface that will look identical in fifteen years; the other is a surface that will look like it has been lived with.",
@@ -76,9 +76,9 @@ export const entries: Entry[] = [
     title: "Light, Controlled",
     standfirst:
       "Window fashion is the one category specified to the opening rather than to the room.",
-    image: "/img/site/prodotti-macro8.jpg",
+    image: "/img/site/hd-feature.jpg",
     body: [
-      "Shading is the last thing most interiors consider and the first thing that fails. An opening facing west in Kolkata takes a different system from the same opening facing north, and the difference is not decorative — it is heat, glare and the lifespan of everything the light lands on.",
+      "Shading is the last thing most interiors consider and the first thing that fails. An opening facing west in Kolkata takes a different system from the same opening facing north, and the difference is not decorative. It is heat, glare and the lifespan of everything the light lands on.",
       "Hunter Douglas builds for that distinction. Duette holds an insulating air pocket in the pleat. Silhouette suspends fabric vanes between two sheers so the light is diffused rather than blocked. Pirouette and Luminette solve the same problem again at different scales, and PowerView motorises any of them so the whole house can move on one schedule.",
       "We measure the opening, take the orientation, and specify from there. It is the least fashionable part of the showroom and the part that changes a room the most.",
     ],
