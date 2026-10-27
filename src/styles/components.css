@@ -1341,19 +1341,21 @@ a.jpager__cell:hover { background: var(--paper-warm); }
   padding-bottom: 8rem;
 }
 .avm__head { display: flex; flex-direction: column; gap: 1.2rem; }
+/* Stacked rows rather than side-by-side columns, so texts of different
+   lengths never leave one column hanging short of the other. */
 .avm__items {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 4.8rem;
 }
 .avm__item {
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
+  display: grid;
+  grid-template-columns: 20rem minmax(0, 1fr);
+  gap: 1.6rem 4.8rem;
   padding-top: 2rem;
   border-top: 1px solid var(--ink-40);
 }
-.avm__item .t-md { color: var(--ink-60); max-width: 52rem; }
+.avm__item .t-md { color: var(--ink-60); max-width: 64rem; }
 
 .aphil {
   display: grid;
@@ -1398,7 +1400,8 @@ a.jpager__cell:hover { background: var(--paper-warm); }
   .afigures { grid-template-columns: 1fr; }
   .asectors, .aphil, .aclose { padding-top: 6.4rem; padding-bottom: 6.4rem; }
   .asectors__grid { grid-template-columns: 1fr; gap: 4rem; }
-  .avm__items { grid-template-columns: 1fr; gap: 3.2rem; }
+  .avm__items { gap: 3.2rem; }
+  .avm__item { grid-template-columns: 1fr; }
   .avm { grid-template-columns: 1fr; gap: 3.2rem; padding-top: 6.4rem; padding-bottom: 6.4rem; }
   .aphil { grid-template-columns: 1fr; gap: 3.2rem; }
   .ahouses { padding-bottom: 6.4rem; }
