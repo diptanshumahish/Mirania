@@ -3,7 +3,6 @@ import Link from "next/link";
 import Media from "@/components/Media";
 import Reveal from "@/components/Reveal";
 import { Arrow } from "@/components/Logo";
-import HouseIndex from "@/components/HouseIndex";
 import Intro from "@/components/Intro";
 import ParallaxStage from "@/components/ParallaxStage";
 import PinnedRail from "@/components/PinnedRail";
@@ -220,67 +219,37 @@ export default function Home() {
           </div>
         </div>
 
-        <HouseIndex>
-          <div className="houses__panel" aria-hidden="true">
-            <div className="houses__frame">
-              {brands.map((b, i) => (
-                <div
-                  key={b.slug}
-                  data-house={b.slug}
-                  className={`houses__plate ${i === 0 ? "is-active" : ""}`}
-                >
-                  <Media src={b.scene} alt="" ratio={4 / 5} sizes="(max-width: 991px) 0px, 36vw" />
-                </div>
-              ))}
-            </div>
-            <div className="houses__captions">
-              {brands.map((b, i) => (
-                <p
-                  key={b.slug}
-                  data-house={b.slug}
-                  className={`houses__caption ${i === 0 ? "is-active" : ""}`}
-                >
-                  <span className="serif">{b.name}</span>
-                  <span className="mono-sm muted">{b.origin}</span>
-                </p>
-              ))}
-            </div>
-          </div>
-
-          <ol className="houses__list">
-            {brands.map((b, i) => {
-              const cats = categoriesForBrand(b.slug);
-              return (
-                <li key={b.slug}>
-                  <Link
-                    href={`/brands/${b.slug}`}
-                    data-house={b.slug}
-                    className={`houses__row ${i === 0 ? "is-active" : ""}`}
-                  >
-                    <span className="houses__thumb">
-                      <Media src={b.scene} alt="" ratio={1} sizes="96px" />
-                    </span>
-                    <span className="houses__name">
-                      <span className="h3">{b.name}</span>
-                      <span className="t-base muted houses__blurb">{b.blurb}</span>
-                    </span>
-                    <span className="houses__meta">
-                      <span className="mono-sm">{b.origin}</span>
-                      {cats.length > 0 && (
-                        <span className="mono-sm muted">
-                          {cats.slice(0, 2).map((c) => c.name).join(" · ")}
-                        </span>
-                      )}
-                    </span>
-                    <span className="houses__go">
-                      <Arrow />
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ol>
-        </HouseIndex>
+        <ul className="houses__grid">
+          {brands.map((b, i) => {
+            const cats = categoriesForBrand(b.slug);
+            return (
+              <Reveal as="li" key={b.slug} delay={(i % 3) * 80}>
+                <Link href={`/brands/${b.slug}`} className="hcard">
+                  <div className="hcard__plate">
+                    <Media
+                      src={b.scene}
+                      alt={`${b.name} furniture`}
+                      ratio={4 / 5}
+                      sizes="(max-width: 991px) 50vw, 30vw"
+                    />
+                    <div className="hcard__veil" aria-hidden="true">
+                      <p className="t-base">{b.blurb}</p>
+                    </div>
+                  </div>
+                  <div className="hcard__meta">
+                    <h3 className="h4">{b.name}</h3>
+                    <span className="mono-sm muted">{b.origin}</span>
+                  </div>
+                  {cats.length > 0 && (
+                    <p className="mono-sm muted hcard__cats">
+                      {cats.map((c) => c.name).join(" · ")}
+                    </p>
+                  )}
+                </Link>
+              </Reveal>
+            );
+          })}
+        </ul>
       </section>
 
       {/* ---------------------------------------------------------------- */}

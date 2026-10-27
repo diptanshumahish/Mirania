@@ -91,7 +91,7 @@ export default function AboutPage() {
           <Media
             src="/img/site/about-large-1.jpg"
             alt="Brick facade of the Mirania building"
-            ratio={4 / 5}
+            ratio={5 / 4}
             sizes="(max-width: 991px) 100vw, 45vw"
             priority
           />
@@ -120,6 +120,26 @@ export default function AboutPage() {
         <Media src="/img/site/slider01.jpg" alt="A light-filled lounge with layered seating" ratio={4 / 3} sizes="(max-width: 780px) 100vw, 60vw" />
       </section>
 
+      {/* Vision & Mission ---------------------------------------------- */}
+      <section className="section--sand">
+        <div className="block-pad avm">
+          <div className="avm__head">
+            <p className="mono-sm muted">What guides us</p>
+            <h2 className="h3">Vision &amp; mission</h2>
+          </div>
+          <div className="avm__items">
+            <Reveal className="avm__item">
+              <h3 className="h5">Our vision</h3>
+              <p className="t-md">{about.vision}</p>
+            </Reveal>
+            <Reveal className="avm__item" delay={100}>
+              <h3 className="h5">Our mission</h3>
+              <p className="t-md">{about.mission}</p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       {/* What we furnish ----------------------------------------------- */}
       <section className="block-pad asectors">
         <div className="band-head" style={{ paddingLeft: 0, paddingRight: 0 }}>
@@ -141,20 +161,6 @@ export default function AboutPage() {
             </Reveal>
           ))}
         </ul>
-      </section>
-
-      {/* Vision & Mission ---------------------------------------------- */}
-      <section className="section--sand">
-        <div className="block-pad avm">
-          <Reveal className="avm__item">
-            <p className="mono-sm muted">Vision</p>
-            <p className="h4 balance">{about.vision}</p>
-          </Reveal>
-          <Reveal className="avm__item" delay={100}>
-            <p className="mono-sm muted">Mission</p>
-            <p className="h4 balance">{about.mission}</p>
-          </Reveal>
-        </div>
       </section>
 
       {/* Philosophy ----------------------------------------------------- */}
