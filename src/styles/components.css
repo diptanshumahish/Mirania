@@ -56,7 +56,6 @@
 }
 .nav.is-over .muted { color: var(--paper-60); }
 .nav.is-over .dot.is-closed { background: var(--paper-60); }
-.nav.is-over .lockup__sub { color: var(--paper-60); }
 
 .nav__brand {
   display: flex;
@@ -65,44 +64,30 @@
 }
 
 /* Logotype lockup ---------------------------------------------------------- */
+/* Everything is sized off the mark's width (--lk), in the proportions of the
+   master artwork: wordmark 0.514 of the mark wide-for-tall, gap 0.153. */
 .lockup {
+  --lk: 4.8rem;
   display: flex;
-  align-items: center;
-  gap: 1.6rem;
+  align-items: flex-end;
+  gap: calc(var(--lk) * 0.153);
 }
 .lockup__mark {
-  width: 4.8rem;
+  width: var(--lk);
   height: auto;
   flex: none;
 }
 .lockup__type {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-.lockup__name {
-  font-family: var(--font-serif);
-  font-size: 2.6rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  line-height: 0.9;
-}
-.lockup__sub {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.35rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  color: var(--ink-60);
-  margin-top: 0.2rem;
-  transition: color 0.5s var(--ease);
+  height: calc(var(--lk) * 0.514);
+  width: auto;
+  flex: none;
+  margin-bottom: calc(var(--lk) * -0.011);
+  /* "Furniture" sits on the viewBox edge; a snapped clip shaves it at small sizes. */
+  overflow: visible;
 }
 
 @media screen and (max-width: 560px) {
-  .lockup { gap: 1.2rem; }
-  .lockup__mark { width: 4rem; }
-  .lockup__name { font-size: 2.2rem; }
-  .lockup__sub { font-size: 1.2rem; }
+  .lockup { --lk: 4rem; }
 }
 
 .nav__meta {
@@ -535,9 +520,7 @@ main { padding-top: var(--nav-space); }
   gap: 4.8rem;
   padding: 8rem var(--gutter) 5.6rem;
 }
-.footer__brand .lockup__mark { width: 4.4rem; }
-.footer__brand .lockup__name { font-size: 2.4rem; }
-.footer__brand .lockup__sub { color: rgba(247, 242, 232, 0.55); }
+.footer__brand .lockup { --lk: 4.4rem; }
 .footer__line {
   font-family: var(--font-serif);
   font-size: 2.2rem;
@@ -923,8 +906,8 @@ a.jpager__cell:hover { background: var(--paper-warm); }
 
 /* Once the page moves, the bar draws in a little tighter. */
 .nav.is-scrolled:not(.is-over) .nav__bar { min-height: calc(var(--nav-h) - 1.2rem); }
-.nav.is-scrolled:not(.is-over) .lockup__mark { transform: scale(0.88); }
-.lockup__mark { transform-origin: left center; transition: transform 0.5s var(--ease); }
+.nav.is-scrolled:not(.is-over) .lockup { transform: scale(0.88); }
+.nav .lockup { transform-origin: left center; transition: transform 0.5s var(--ease); }
 
 /* Product cards: the caption follows the image up a touch. */
 .pcard__meta { transition: transform 0.45s var(--ease); }
@@ -976,7 +959,7 @@ a.jpager__cell:hover { background: var(--paper-warm); }
   }
   .nav__ink,
   .nav__bar,
-  .lockup__mark { transition: none; }
+  .nav .lockup { transition: none; }
 }
 
 /* ==========================================================================
