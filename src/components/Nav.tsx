@@ -119,7 +119,7 @@ export default function Nav() {
           keeps it out of the tab order and away from the pointer meanwhile. */}
       <div className="nav__overlay" id="nav-overlay" inert={!open}>
         <nav className="nav__overlay-links" aria-label="Menu">
-          {[{ label: "Index", href: "/" }, ...nav].map((item, i) => (
+          {[{ label: "Home", href: "/" }, ...nav].map((item, i) => (
             <Link
               key={item.href}
               href={item.href}

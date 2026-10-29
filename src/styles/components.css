@@ -172,7 +172,7 @@
   gap: 1.6rem;
   padding: 1.6rem var(--gutter);
   font-family: var(--font-serif);
-  font-size: 3.2rem;
+  font-size: 2.8rem;
   line-height: 1.1;
   font-weight: 400;
   border-bottom: 1px solid var(--rule);
@@ -187,6 +187,9 @@
 }
 .nav__overlay-link.is-current { font-style: italic; color: var(--accent); }
 .nav__overlay-link.is-current .nav__overlay-num { font-style: normal; }
+@media screen and (max-width: 560px) {
+  .nav__overlay-foot { flex-direction: column; gap: 2rem; }
+}
 .nav__overlay-address { display: none; font-style: normal; color: var(--ink-60); }
 .nav__scrim { display: none; }
 .nav__overlay-foot {
@@ -975,10 +978,10 @@ a.jpager__cell:hover { background: var(--paper-warm); }
   .nav--menu .nav__overlay-link {
     padding: 0.4rem 0;
     border: 0;
-    font-size: clamp(3.6rem, 6.4vh, 6rem);
-    line-height: 1.05;
+    font-size: clamp(2.8rem, 4.4vh, 4rem);
+    line-height: 1.15;
   }
-  .nav--menu .nav__overlay-num { min-width: 3.2rem; }
+  .nav--menu .nav__overlay-num { min-width: 2.8rem; }
   .nav--menu .nav__overlay-links:hover .nav__overlay-link:not(:hover) { color: var(--ink-40); }
   .nav--menu .nav__overlay-link:hover { color: var(--accent); }
 
