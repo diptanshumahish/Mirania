@@ -7,6 +7,12 @@ import { contact, nav } from "@/data/site";
 import { Lockup, Arrow } from "./Logo";
 import StudioClock from "./StudioClock";
 
+/**
+ * Experiment: the menu button and its sheet on desktop as well, in place of
+ * the inline links. Set to false to bring the inline links back.
+ */
+const DESKTOP_MENU = true;
+
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -61,7 +67,7 @@ export default function Nav() {
 
   return (
     <header
-      className={`nav ${open ? "is-open" : ""} ${scrolled ? "is-scrolled" : ""} ${overHero ? "is-over" : ""}`}
+      className={`nav ${DESKTOP_MENU ? "nav--menu" : ""} ${open ? "is-open" : ""} ${scrolled ? "is-scrolled" : ""} ${overHero ? "is-over" : ""}`}
     >
       <div className="nav__bar">
         <Link href="/" className="nav__brand" aria-label="Mirania Furniture — home">
@@ -72,34 +78,36 @@ export default function Nav() {
           <StudioClock />
         </div>
 
-        <nav
-          ref={linksRef}
-          className="nav__links hide-mobile"
-          aria-label="Primary"
-          onMouseLeave={() => placeInk()}
-          onBlur={() => placeInk()}
-        >
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`nav__link ${pathname.startsWith(item.href) ? "is-current" : ""}`}
-              onMouseEnter={(e) => placeInk(e.currentTarget)}
-              onFocus={(e) => placeInk(e.currentTarget)}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <span className="nav__ink" aria-hidden="true" />
-        </nav>
+        {!DESKTOP_MENU && (
+          <nav
+            ref={linksRef}
+            className="nav__links hide-mobile"
+            aria-label="Primary"
+            onMouseLeave={() => placeInk()}
+            onBlur={() => placeInk()}
+          >
+            {nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`nav__link ${pathname.startsWith(item.href) ? "is-current" : ""}`}
+                onMouseEnter={(e) => placeInk(e.currentTarget)}
+                onFocus={(e) => placeInk(e.currentTarget)}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <span className="nav__ink" aria-hidden="true" />
+          </nav>
+        )}
 
         <button
           className="nav__toggle"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="nav-overlay"
+          aria-label={open ? "Close menu" : "Open menu"}
         >
-          <span className="mono-sm">{open ? "Close" : "Menu"}</span>
           <span className="nav__burger" aria-hidden="true">
             <i />
             <i />
@@ -107,28 +115,36 @@ export default function Nav() {
         </button>
       </div>
 
-      <div className="nav__overlay" id="nav-overlay" hidden={!open}>
-        <nav className="nav__overlay-links" aria-label="Primary mobile">
-          <Link
-            href="/"
-            className="nav__overlay-link"
-            style={{ "--i": 0 } as React.CSSProperties}
-          >
-            Index
-          </Link>
-          {nav.map((item, i) => (
+      {/* Stays mounted so it can animate closed as well as open; `inert`
+          keeps it out of the tab order and away from the pointer meanwhile. */}
+      <div className="nav__overlay" id="nav-overlay" inert={!open}>
+        <nav className="nav__overlay-links" aria-label="Menu">
+          {[{ label: "Index", href: "/" }, ...nav].map((item, i) => (
             <Link
               key={item.href}
               href={item.href}
-              className="nav__overlay-link"
-              style={{ "--i": i + 1 } as React.CSSProperties}
+              className={`nav__overlay-link ${
+                (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)) ? "is-current" : ""
+              }`}
+              style={{ "--i": i } as React.CSSProperties}
             >
+              <span className="nav__overlay-num" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
               {item.label}
             </Link>
           ))}
         </nav>
         <div className="nav__overlay-foot">
           <StudioClock />
+          <address className="mono-sm nav__overlay-address">
+            {contact.address.lines.slice(0, 3).map((l) => (
+              <span key={l}>
+                {l}
+                <br />
+              </span>
+            ))}
+          </address>
           <div className="stack" style={{ gap: "0.6rem" }}>
             <a href={`mailto:${contact.email}`} className="mono-sm link-u">
               {contact.email}
@@ -147,6 +163,7 @@ export default function Nav() {
           </div>
         </div>
       </div>
+      <div className="nav__scrim" aria-hidden="true" onClick={() => setOpen(false)} />
     </header>
   );
 }

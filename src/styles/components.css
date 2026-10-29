@@ -96,9 +96,23 @@
   gap: 3.2rem;
 }
 
+/* Showroom status: set in the serif, like the links beside it. */
 .clock { display: flex; gap: 1rem; align-items: flex-start; }
-.clock .dot { margin-top: 0.45rem; }
-.clock__text { line-height: 1.6; margin: 0; }
+.clock .dot { margin-top: 0.6rem; }
+.clock__text {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.clock__time { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.clock .dot.is-live { animation: dot-breathe 2.8s var(--ease) infinite; }
+@keyframes dot-breathe {
+  50% { box-shadow: 0 0 0 0.55rem rgba(92, 138, 90, 0.08); }
+}
 
 .nav__links {
   display: flex;
@@ -114,14 +128,14 @@
   line-height: 1.3;
 }
 
+/* Icon only; the button carries its own label. */
 .nav__toggle {
   display: none;
   align-items: center;
-  gap: 1rem;
-  margin-left: auto;
-  padding: 1rem 0 1rem 1rem;
+  margin: 0 -1.2rem 0 auto;
+  padding: 1.2rem;
 }
-.nav__burger { display: flex; flex-direction: column; gap: 0.5rem; width: 2.2rem; }
+.nav__burger { display: flex; flex-direction: column; gap: 0.6rem; width: 2.6rem; }
 .nav__burger i { display: block; height: 1px; background: currentColor; }
 
 @media screen and (max-width: 1180px) {
@@ -147,10 +161,15 @@
   flex-direction: column;
   justify-content: space-between;
   overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
 }
-.nav__overlay[hidden] { display: none; }
+.nav.is-open .nav__overlay { opacity: 1; visibility: visible; }
 .nav__overlay-links { display: flex; flex-direction: column; }
 .nav__overlay-link {
+  display: flex;
+  align-items: baseline;
+  gap: 1.6rem;
   padding: 1.6rem var(--gutter);
   font-family: var(--font-serif);
   font-size: 3.2rem;
@@ -158,6 +177,18 @@
   font-weight: 400;
   border-bottom: 1px solid var(--rule);
 }
+.nav__overlay-num {
+  min-width: 2.4rem;
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-40);
+}
+.nav__overlay-link.is-current { font-style: italic; color: var(--accent); }
+.nav__overlay-link.is-current .nav__overlay-num { font-style: normal; }
+.nav__overlay-address { display: none; font-style: normal; color: var(--ink-60); }
+.nav__scrim { display: none; }
 .nav__overlay-foot {
   display: flex;
   justify-content: space-between;
@@ -886,20 +917,98 @@ a.jpager__cell:hover { background: var(--paper-warm); }
    Mobile menu
    -------------------------------------------------------------------------- */
 
-.nav__overlay { animation: overlay-in 0.35s var(--ease) both; }
-@keyframes overlay-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+/* The sheet stays mounted, so closing animates too: on the way out
+   everything leaves at once and quickly; on the way in the links follow one
+   another up. */
+.nav__overlay { transition: opacity 0.3s var(--ease), visibility 0s linear 0.3s; }
+.nav.is-open .nav__overlay { transition: opacity 0.35s var(--ease); }
+
+.nav__overlay-link,
+.nav__overlay-foot {
+  opacity: 0;
+  transform: translateY(1.6rem);
+  transition: opacity 0.2s var(--ease), transform 0.3s var(--ease), color 0.35s var(--ease);
 }
-.nav__overlay-link {
-  animation: enter-up 0.5s var(--ease) both;
-  animation-delay: calc(0.06s + var(--i, 0) * 0.045s);
+.nav.is-open .nav__overlay-link,
+.nav.is-open .nav__overlay-foot {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s var(--ease) calc(0.1s + var(--i, 0) * 0.045s),
+    transform 0.8s var(--ease-out) calc(0.1s + var(--i, 0) * 0.045s),
+    color 0.35s var(--ease);
 }
-.nav__overlay-foot { animation: enter-up 0.5s var(--ease) 0.3s both; }
+.nav__overlay-foot { --i: 7; }
+
+/* Desktop experiment (`.nav--menu`): the bar unrolls downward into a sheet of
+   the same card, over a soft scrim. */
+@media screen and (min-width: 992px) {
+  .nav--menu .nav__toggle { display: flex; }
+  .nav--menu.is-open .nav__bar {
+    background: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .nav--menu .nav__overlay {
+    position: absolute;
+    inset: 0 0 auto;
+    max-height: calc(100vh - 2.4rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 4.8rem;
+    padding: calc(var(--nav-h) + 3.2rem) 3.2rem 3.2rem 2.8rem;
+    border-radius: 1.4rem;
+    box-shadow: 0 0 0 1px rgba(34, 28, 22, 0.05), 0 2.4rem 6.4rem -2.4rem rgba(34, 28, 22, 0.35);
+    /* Closed, the sheet is cut back to the bar's own height. */
+    clip-path: inset(0 0 calc(100% - var(--nav-h)) 0 round 1.4rem);
+    opacity: 1;
+    transition: clip-path 0.55s var(--ease), visibility 0s linear 0.55s;
+  }
+  .nav--menu.is-open .nav__overlay {
+    clip-path: inset(0 round 1.4rem);
+    transition: clip-path 0.8s var(--ease-out);
+  }
+
+  .nav--menu .nav__overlay-link {
+    padding: 0.4rem 0;
+    border: 0;
+    font-size: clamp(3.6rem, 6.4vh, 6rem);
+    line-height: 1.05;
+  }
+  .nav--menu .nav__overlay-num { min-width: 3.2rem; }
+  .nav--menu .nav__overlay-links:hover .nav__overlay-link:not(:hover) { color: var(--ink-40); }
+  .nav--menu .nav__overlay-link:hover { color: var(--accent); }
+
+  .nav--menu .nav__overlay-foot {
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    padding: 0;
+  }
+  .nav--menu .nav__overlay-foot .clock { display: none; } /* already in the bar */
+  .nav--menu .nav__overlay-address { display: block; line-height: 1.5; margin-bottom: 1.2rem; }
+
+  .nav--menu .nav__scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: rgba(34, 28, 22, 0.3);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s var(--ease);
+  }
+  .nav--menu.is-open .nav__scrim { opacity: 1; pointer-events: auto; }
+}
 
 .nav__burger i { transition: transform 0.35s var(--ease), opacity 0.2s var(--ease); }
-.nav.is-open .nav__burger i:first-child { transform: translateY(2.5px) rotate(45deg); }
-.nav.is-open .nav__burger i:last-child { transform: translateY(-2.5px) rotate(-45deg); }
+.nav.is-open .nav__burger i:first-child { transform: translateY(0.35rem) rotate(45deg); }
+.nav.is-open .nav__burger i:last-child { transform: translateY(-0.35rem) rotate(-45deg); }
 
 /* --------------------------------------------------------------------------
    Reduced motion
@@ -907,9 +1016,6 @@ a.jpager__cell:hover { background: var(--paper-warm); }
 
 @media (prefers-reduced-motion: reduce) {
   .enter,
-  .nav__overlay,
-  .nav__overlay-link,
-  .nav__overlay-foot,
   .intro__mark path {
     animation: none !important;
     opacity: 1;
@@ -918,7 +1024,15 @@ a.jpager__cell:hover { background: var(--paper-warm); }
   }
   .nav__ink,
   .nav__bar,
-  .nav .lockup { transition: none; }
+  .nav .lockup,
+  .nav__overlay,
+  .nav__overlay-link,
+  .nav__overlay-foot,
+  .nav__scrim { transition: none !important; }
+  .nav__overlay-link,
+  .nav__overlay-foot { transform: none; }
+  .nav--menu .nav__overlay { clip-path: none; }
+  .clock .dot.is-live { animation: none; }
 }
 
 /* ==========================================================================
@@ -1523,16 +1637,27 @@ a.jpager__cell:hover { background: var(--paper-warm); }
   animation: vt-leave 0.7s var(--ease) both;
 }
 ::view-transition-new(root) {
-  animation: vt-arch 1.1s var(--ease-out) both;
+  --rise: 0;
+  --square: 0;
+  clip-path: inset(
+    calc((1 - var(--rise)) * 100%) 0 0 0
+    round calc((1 - var(--square)) * 50vw) calc((1 - var(--square)) * 50vw) 0 0
+  );
+  animation:
+    arch-rise 0.95s var(--ease-out) both,
+    arch-square 0.7s var(--ease) 0.4s both;
 }
 @keyframes vt-leave {
   to { opacity: 0; transform: translateY(-3.2rem) scale(0.985); filter: blur(4px); }
 }
-@keyframes vt-arch {
-  0%   { clip-path: inset(100% 0 0 0 round 50vw 50vw 0 0); }
-  62%  { clip-path: inset(0 0 0 0 round 50vw 50vw 0 0); }
-  100% { clip-path: inset(0 0 0 0 round 0 0 0 0); }
-}
+/* The arch is two motions, not one: it rises, and, overlapping the end of
+   the rise, its crown squares off. Each is its own registered number with its
+   own easing. A single keyframed clip-path stalled at the join, since the
+   easing restarts on every keyframe segment. */
+@property --rise { syntax: "<number>"; inherits: false; initial-value: 1; }
+@property --square { syntax: "<number>"; inherits: false; initial-value: 1; }
+@keyframes arch-rise { from { --rise: 0; } to { --rise: 1; } }
+@keyframes arch-square { from { --square: 0; } to { --square: 1; } }
 
 /* Arch unveil ----------------------------------------------------------------
    Frames marked `data-unveil` rise out of the mark's own shape as they enter
@@ -1540,14 +1665,27 @@ a.jpager__cell:hover { background: var(--paper-warm); }
    `html.fx`, so without script nothing is ever hidden.
    The clip sits on the image, not the frame: IntersectionObserver honours a
    target's own clip-path, so a fully clipped frame would never report in. */
+/* The frame is a size container, so the crown is exactly half the frame's
+   width (a true semicircle) whatever its proportions. A viewport-sized
+   radius got clamped on narrow frames and snapped square at the end. */
+html.fx [data-unveil] { container-type: inline-size; }
 html.fx [data-unveil] img {
-  clip-path: inset(100% 0 0 0 round 50vw 50vw 0 0);
-  scale: 1.18;
-  transition: scale 2s var(--ease-out);
+  --rise: 0;
+  --square: 0;
+  --d: 0s;
+  clip-path: inset(
+    calc((1 - var(--rise)) * 100%) 0 0 0
+    round calc((1 - var(--square)) * 50cqi) calc((1 - var(--square)) * 50cqi) 0 0
+  );
+  scale: 1.14;
+  transition:
+    --rise 1.4s var(--ease-out) var(--d),
+    --square 1s var(--ease) calc(var(--d) + 0.6s),
+    scale 2.2s var(--ease-out) var(--d);
 }
-html.fx [data-unveil].is-unveiled img { animation: vt-arch 1.6s var(--ease-out) both; scale: 1; }
-.houses__grid > :nth-child(3n + 2) [data-unveil] img { animation-delay: 0.12s; transition-delay: 0.12s; }
-.houses__grid > :nth-child(3n + 3) [data-unveil] img { animation-delay: 0.24s; transition-delay: 0.24s; }
+html.fx [data-unveil].is-unveiled img { --rise: 1; --square: 1; scale: 1; }
+.houses__grid > :nth-child(3n + 2) [data-unveil] img { --d: 0.12s; }
+.houses__grid > :nth-child(3n + 3) [data-unveil] img { --d: 0.24s; }
 
 /* Scroll-inked statements ----------------------------------------------------
    Each word comes out of a faint blur as the statement crosses the viewport,
