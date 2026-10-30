@@ -2,21 +2,13 @@ import Link from "next/link";
 import { contact, credits, nav, site } from "@/data/site";
 import { activeCategories } from "@/data/catalog";
 import { Arrow, Lockup } from "./Logo";
+import FooterShell from "./FooterShell";
 import Subscribe from "./Subscribe";
 
 export default function Footer() {
   return (
-    <footer className="footer">
+    <FooterShell>
       <div className="footer__inner">
-        <div className="footer__top">
-          <Link href="/" className="footer__brand" aria-label="Mirania Furniture — home">
-            <Lockup />
-          </Link>
-          <p className="footer__line">
-            Spaces transformed into <em>comfortable havens</em>, since {site.founded}.
-          </p>
-        </div>
-
         <div className="footer__grid block-pad">
           <div className="footer__col">
             <p className="footer__label">Showroom</p>
@@ -104,6 +96,15 @@ export default function Footer() {
           </div>
         </div>
 
+        <div className="footer__brand-row">
+          <p className="footer__line">
+            Spaces transformed into <em>comfortable havens</em>, since {site.founded}.
+          </p>
+          <Link href="/" className="footer__brand" aria-label="Mirania Furniture — home">
+            <Lockup />
+          </Link>
+        </div>
+
         <div className="footer__bar">
           <p className="mono-sm muted">
             {credits.line.replace("©", `© ${credits.year}`)}
@@ -118,6 +119,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </footer>
+    </FooterShell>
   );
 }

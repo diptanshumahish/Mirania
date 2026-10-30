@@ -547,30 +547,27 @@ main { padding-top: var(--nav-space); }
 .footer .muted { color: rgba(247, 242, 232, 0.55); }
 .footer .link-u:hover { border-bottom-color: var(--gold); }
 
-.footer__top {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 4.8rem;
-  padding: 8rem var(--gutter) 5.6rem;
+/* Contents pinned to the viewport bottom and clipped to the footer's box, so
+   they are uncovered as it scrolls in. FooterShell only sets .is-reveal (and
+   the box height) when the contents fit in the viewport. */
+.footer.is-reveal {
+  position: relative;
+  clip-path: inset(0);
 }
-.footer__brand .lockup { --lk: 4.4rem; }
-.footer__line {
-  font-family: var(--font-serif);
-  font-size: 2.2rem;
-  line-height: 1.3;
-  max-width: 44rem;
-  text-align: right;
+.footer.is-reveal .footer__pin {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
-.footer__line em { color: var(--gold); }
 
 .footer__grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 4.8rem 3.2rem;
   margin: 0 var(--gutter);
-  padding: 5.6rem 0 6.4rem;
-  border-top: 1px solid var(--hair);
+  /* Clears the fixed bar, which floats over the top of the footer. */
+  padding: calc(var(--nav-space) + 4rem) 0 6.4rem;
 }
 .footer__col--wide { grid-column: span 1; }
 .footer__label {
@@ -584,6 +581,24 @@ main { padding-top: var(--nav-space); }
 .footer__note { margin-bottom: 2rem; color: rgba(247, 242, 232, 0.7); }
 .footer .subscribe { border-bottom-color: rgba(247, 242, 232, 0.4); }
 .footer .subscribe__input::placeholder { color: rgba(247, 242, 232, 0.4); }
+
+.footer__brand-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4.8rem;
+  margin: 0 var(--gutter);
+  padding: 4.8rem 0;
+  border-top: 1px solid var(--hair);
+}
+.footer__brand .lockup { --lk: 12rem; }
+.footer__line {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  line-height: 1.3;
+  max-width: 44rem;
+}
+.footer__line em { color: var(--gold); }
 
 .footer__bar {
   display: flex;
@@ -602,9 +617,10 @@ main { padding-top: var(--nav-space); }
   .footer__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media screen and (max-width: 700px) {
-  .footer__top { flex-direction: column; align-items: flex-start; gap: 2.4rem; padding: 5.6rem var(--gutter) 4rem; }
-  .footer__line { text-align: left; font-size: 2rem; }
-  .footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3.2rem 2rem; padding: 4rem 0 4.8rem; }
+  .footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3.2rem 2rem; padding: calc(var(--nav-space) + 2.4rem) 0 4.8rem; }
+  .footer__brand-row { flex-direction: column; align-items: flex-start; gap: 2.4rem; padding: 4rem 0; }
+  .footer__brand .lockup { --lk: 8rem; }
+  .footer__line { font-size: 2rem; }
   .footer__col--wide { grid-column: span 2; }
   .footer__bar { flex-direction: column; align-items: flex-start; gap: 1.6rem; }
 }
