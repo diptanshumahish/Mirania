@@ -3,14 +3,14 @@ import Link from "next/link";
 import Media from "@/components/Media";
 import Reveal from "@/components/Reveal";
 import { Arrow } from "@/components/Logo";
-import { brands, categoriesForBrand, productsByBrand } from "@/data/catalog";
+import { brands } from "@/data/catalog";
 import { site } from "@/data/site";
 import { JsonLd, breadcrumbList, canonical, itemList, webPage } from "@/lib/seo";
 
 const PATH = "/brands";
-const TITLE = "Furniture Brands in Kolkata — Stanley, Bolia, Steelcase & More";
+const TITLE = "Furniture Brands in Kolkata — Steelcase, Vitra, Stanley & More";
 const DESCRIPTION =
-  "Stanley, Bolia, Wendelbo, Viccarbe, Steelcase, Hunter Douglas, Grado, M.A.D and Michael Strads — nine design houses under one roof in Kolkata.";
+  "Steelcase, Vitra, Stanley, Bolia, Wendelbo, Viccarbe, Hunter Douglas, DEKO and more, alongside Mirania's own Sycaamore and At Ease — under one roof in Kolkata.";
 
 export const metadata: Metadata = {
   title: "Brands",
@@ -64,14 +64,13 @@ export default function BrandsPage() {
         <div className="pintro__text">
           <p className="mono-sm muted">Brands</p>
           <h1 className="h1 balance">
-            The world&rsquo;s houses, under one roof.
+            Different disciplines. <em>One point of view.</em>
           </h1>
           <div className="pintro__side">
             <p className="t-lg">
-              As a multi-designer store we have housed globally renowned brands,
-              cementing our position as a furniture boutique in Eastern India.
-              Each house is chosen for one thing it does better than anyone
-              else.
+              Mirania brings together core brands with distinct strengths across
+              home, workplace and architectural solutions. Each is selected for
+              what it adds to the way a space performs, feels and endures.
             </p>
             <nav className="pintro__jump" aria-label="Jump to a house">
               {brands.map((b) => (
@@ -84,8 +83,8 @@ export default function BrandsPage() {
         </div>
         <div className="pintro__media">
           <Media
-            src="/img/site/slider03.jpg"
-            alt="A tan leather sofa in a dark, arched room"
+            src="/img/profile/evolve.jpg"
+            alt="A low sofa and lounge chair in a light-filled room"
             ratio={21 / 9}
             sizes="100vw"
             priority
@@ -95,8 +94,6 @@ export default function BrandsPage() {
 
       <div className="pad-x" style={{ paddingTop: "8rem", paddingBottom: "8rem" }}>
         {brands.map((b, i) => {
-          const count = productsByBrand(b.slug).length;
-          const cats = categoriesForBrand(b.slug);
           return (
             <section
               key={b.slug}
@@ -118,20 +115,21 @@ export default function BrandsPage() {
                   <h2 className="h2">
                     <Link href={`/brands/${b.slug}`}>{b.name}</Link>
                   </h2>
-                  <span className="mono-sm muted">{b.origin}</span>
+                  <span className="mono-sm muted">
+                    {b.own ? "A Mirania brand · " : ""}
+                    {b.place} · {b.founded}
+                  </span>
                 </div>
                 <p className="t-lg">{b.blurb}</p>
-                {cats.length > 0 && (
-                  <div className="brow__tags">
-                    {cats.map((c) => (
-                      <Link key={c.slug} href={`/collections/${c.slug}`} className="filter">
-                        {c.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                <div className="brow__tags">
+                  {b.disciplines.map((d) => (
+                    <span key={d} className="filter">
+                      {d}
+                    </span>
+                  ))}
+                </div>
                 <Link href={`/brands/${b.slug}`} className="btn is-ghost arrow-link">
-                  {count > 0 ? `View ${count} pieces` : `About ${b.name}`} <Arrow className="arrow" />
+                  Discover {b.name} <Arrow className="arrow" />
                 </Link>
               </Reveal>
             </section>

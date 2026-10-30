@@ -15,10 +15,10 @@ export default function NotFound() {
         <h1 className="h1 balance">This page has left the floor.</h1>
         <p className="t-lg muted" style={{ maxWidth: "52rem" }}>
           The piece or page you were looking for is no longer catalogued here.
-          The collections are the best place to pick the thread back up.
+          Our projects and brands are the best place to pick the thread back up.
         </p>
-        <Link href="/collections" className="btn arrow-link" style={{ alignSelf: "flex-start" }}>
-          Browse collections <Arrow className="arrow" />
+        <Link href="/projects" className="btn arrow-link" style={{ alignSelf: "flex-start" }}>
+          See our projects <Arrow className="arrow" />
         </Link>
       </div>
     </section>

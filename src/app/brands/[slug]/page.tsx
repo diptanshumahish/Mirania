@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ProductGrid from "@/components/ProductGrid";
+import Media from "@/components/Media";
+import ProductCard from "@/components/ProductCard";
+import Reveal from "@/components/Reveal";
 import { Arrow } from "@/components/Logo";
 import {
   brandBySlug,
   brands,
-  categoryBySlug,
   productsByBrand,
+  type Product,
 } from "@/data/catalog";
 import { contact, site } from "@/data/site";
 import {
@@ -16,15 +19,33 @@ import {
   absolute,
   breadcrumbList,
   canonical,
-  itemList,
   webPage,
 } from "@/lib/seo";
 
 type Params = { slug: string };
 
-/** "Netherlands" → "the Netherlands". Country names that take a definite article. */
-function originPhrase(origin: string) {
-  return /^(United|Netherlands|Philippines)\b/.test(origin) ? `the ${origin}` : origin;
+/** How many pieces a brand page shows. It is a sampler, not a listing. */
+const SELECTION = 8;
+
+/**
+ * A spread of a house's pieces: one from each kind in turn (a sofa, a chair,
+ * a table…) until the selection is full, so a brand with ninety sofas does
+ * not read as a sofa shop.
+ */
+function selection(items: Product[], limit = SELECTION) {
+  const byKind = new Map<string, Product[]>();
+  for (const p of items) {
+    const k = p.sub ?? p.category;
+    byKind.set(k, [...(byKind.get(k) ?? []), p]);
+  }
+  const queues = [...byKind.values()];
+  const picked: Product[] = [];
+  for (let i = 0; picked.length < limit && queues.some((q) => q.length > i); i++) {
+    for (const q of queues) {
+      if (q[i] && picked.length < limit) picked.push(q[i]);
+    }
+  }
+  return picked;
 }
 
 export function generateStaticParams() {
@@ -40,30 +61,20 @@ export async function generateMetadata({
   const b = brandBySlug.get(slug);
   if (!b) return { title: "Brand", robots: { index: false, follow: true } };
 
-  const count = productsByBrand(b.slug).length;
   const path = `/brands/${b.slug}`;
-
-  // Lead with the house, the count and the origin; append the blurb's opening
-  // clause only while the whole line still fits inside a SERP snippet.
-  const lead = `${b.name} furniture in Kolkata — ${count} ${
-    count === 1 ? "piece" : "pieces"
-  } from ${originPhrase(b.origin)}, on the floor at Mirania.`;
-  const opener = b.blurb.split(". ")[0];
-  const description =
-    lead.length + opener.length + 3 <= 158 ? `${lead} ${opener}.` : lead;
+  const description = `${b.name} in Kolkata, through Mirania. ${b.blurb}`;
 
   return {
     title: b.name,
-    description,
+    description: description.length <= 168 ? description : b.blurb,
     alternates: { canonical: canonical(path) },
     openGraph: {
-      title: `${b.name} Furniture in Kolkata — Mirania`,
-      description,
+      title: `${b.name} in Kolkata — Mirania`,
+      description: b.blurb,
       url: canonical(path),
       type: "website",
-      images: [{ url: b.cover, alt: `${b.name} furniture at Mirania` }],
+      images: [{ url: b.cover, alt: `${b.name} at Mirania` }],
     },
-    ...(count === 0 ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
@@ -72,15 +83,10 @@ export default async function BrandPage({ params }: { params: Promise<Params> })
   const b = brandBySlug.get(slug);
   if (!b) notFound();
 
-  const items = productsByBrand(b.slug);
-  const byCategory = [...new Set(items.map((p) => p.category))].map((c) => ({
-    slug: c,
-    name: categoryBySlug.get(c)?.name ?? c,
-    count: items.filter((p) => p.category === c).length,
-  }));
-
+  const pieces = selection(productsByBrand(b.slug));
   const index = brands.findIndex((x) => x.slug === b.slug);
   const next = brands[(index + 1) % brands.length];
+  const gallery = b.gallery.filter((g) => g !== b.cover).slice(0, 3);
 
   const path = `/brands/${b.slug}`;
   const trail = [
@@ -88,13 +94,13 @@ export default async function BrandPage({ params }: { params: Promise<Params> })
     { name: "Brands", path: "/brands" },
     { name: b.name, path },
   ];
+  const enquiry = `Hello Mirania — I'd like to know more about ${b.name}.`;
 
   return (
     <>
       <JsonLd
         data={[
-          webPage(path, `${b.name} Furniture in Kolkata`, b.blurb, {
-            type: "CollectionPage",
+          webPage(path, `${b.name} in Kolkata`, b.blurb, {
             trail,
             image: b.cover,
           }),
@@ -119,65 +125,135 @@ export default async function BrandPage({ params }: { params: Promise<Params> })
               },
             },
           },
-          itemList(
-            path,
-            items.slice(0, 100).map((p) => ({
-              name: p.name,
-              path: `/products/${p.slug}`,
-            })),
-            `${b.name} pieces at Mirania`,
-          ),
         ]}
       />
-      <header className="phead">
-        <p className="mono-sm muted phead__crumbs">
-          <Link href="/brands" className="link-u">
-            Brands
-          </Link>
-          <span aria-hidden="true">/</span>
-          <span>{b.name}</span>
-        </p>
-        <h1 className="h1 balance">{b.name}</h1>
-        <p className="t-lg phead__lede">{b.blurb}</p>
-        <p className="mono-sm muted">{b.origin}</p>
+
+      {/* Opening -------------------------------------------------------- */}
+      <header className="bhead">
+        <div className="bhead__text">
+          <p className="mono-sm muted phead__crumbs">
+            <Link href="/brands" className="link-u">
+              Brands
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span>{b.name}</span>
+          </p>
+          <div className="bhead__logo">
+            <Image src={b.logo} alt={`${b.name} logo`} fill sizes="24rem" priority />
+          </div>
+          <h1 className="h1 balance">{b.tagline}</h1>
+          <p className="mono-sm muted">
+            {b.own ? "A Mirania brand" : b.name} · {b.place} · Since {b.founded}
+          </p>
+        </div>
+        <div className="bhead__media">
+          <Media
+            src={b.cover}
+            alt={`${b.name} interior`}
+            ratio={4 / 5}
+            sizes="(max-width: 991px) 100vw, 50vw"
+            priority
+          />
+        </div>
       </header>
 
-      <hr className="rule" />
-
-      <div className="block-pad">
-        {byCategory.length > 1 && (
-          <div className="filters" aria-label="Categories carried">
-            {byCategory.map((c) => (
-              <Link key={c.slug} href={`/collections/${c.slug}`} className="filter">
-                {c.name} <span className="filter__n">{c.count}</span>
-              </Link>
-            ))}
+      {/* About the house ------------------------------------------------ */}
+      <section className="block-pad bstory">
+        <p className="mono-sm muted">About {b.name}</p>
+        <div className="bstory__body">
+          <Reveal className="bstory__text">
+            <p className="h4 balance">{b.story[0]}</p>
+            {b.story.length > 1 && (
+              <div className="prose">
+                {b.story.slice(1).map((para) => (
+                  <p key={para.slice(0, 24)}>{para}</p>
+                ))}
+              </div>
+            )}
+          </Reveal>
+          <div className="deflist">
+            <div className="deflist__row">
+              <span className="mono-sm muted">Origin</span>
+              <span className="t-base">{b.place}</span>
+            </div>
+            <div className="deflist__row">
+              <span className="mono-sm muted">Founded</span>
+              <span className="t-base">{b.founded}</span>
+            </div>
+            <div className="deflist__row">
+              <span className="mono-sm muted">Covers</span>
+              <span className="t-base">{b.disciplines.join(" · ")}</span>
+            </div>
           </div>
-        )}
-        <ProductGrid items={items} />
-      </div>
+        </div>
+      </section>
 
-      <hr className="rule" />
+      {/* Photography ---------------------------------------------------- */}
+      {gallery.length > 0 && (
+        <section className={`pad-x bgallery is-${gallery.length}`}>
+          {gallery.map((src, i) => (
+            <Media
+              key={src}
+              src={src}
+              alt={`${b.name}, image ${i + 1}`}
+              ratio={i === 0 && gallery.length > 1 ? 4 / 3 : 1}
+              sizes="(max-width: 780px) 100vw, 50vw"
+              unveil
+            />
+          ))}
+        </section>
+      )}
 
+      {/* A few pieces --------------------------------------------------- */}
+      {pieces.length > 0 && (
+        <section className="block-pad bpieces">
+          <div className="sec-head">
+            <div className="sec-head__title">
+              <p className="mono-sm muted">Selected pieces</p>
+              <h2 className="h3">A few from {b.name}</h2>
+            </div>
+            <p className="t-md muted sec-head__desc">
+              A glimpse of what we bring in from {b.name}. Much more is
+              available to order; ask us for the full range.
+            </p>
+          </div>
+          <ul className="pgrid">
+            {pieces.map((p) => (
+              <li key={p.slug}>
+                <ProductCard product={p} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Enquire -------------------------------------------------------- */}
       <section className="section--warm">
         <div className="block-pad" style={{ paddingTop: "6.4rem", paddingBottom: "6.4rem" }}>
           <div className="split">
-            <h2 className="h3 balance">
-              Looking for something from {b.name} you cannot see here?
-            </h2>
+            <h2 className="h3 balance">Interested in {b.name}?</h2>
             <div className="stack" style={{ gap: "2rem" }}>
               <p className="t-lg">
-                Our floor carries a fraction of what each house makes. Send us a
-                model name, a photograph or a mood, and we will source it and quote
-                it, delivered and installed.
+                Send us a model name, a photograph or a brief. We will come back
+                with options, finishes and a quote, delivered and installed.
               </p>
-              <div className="row" style={{ gap: "1.2rem", flexWrap: "wrap" }}>
-                <a href={contact.whatsapp} target="_blank" rel="noreferrer" className="btn arrow-link">
-                  Ask on WhatsApp <Arrow className="arrow" />
+              <div className="pdp__actions">
+                <a
+                  href={`${contact.whatsapp}&text=${encodeURIComponent(enquiry)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn arrow-link"
+                >
+                  Enquire on WhatsApp <Arrow className="arrow" />
                 </a>
-                <Link href="/contact" className="btn is-ghost">
-                  Contact the showroom
-                </Link>
+                <a
+                  href={`mailto:${contact.email}?subject=${encodeURIComponent(
+                    `Enquiry — ${b.name}`,
+                  )}&body=${encodeURIComponent(enquiry)}`}
+                  className="btn is-ghost"
+                >
+                  Email us
+                </a>
               </div>
             </div>
           </div>

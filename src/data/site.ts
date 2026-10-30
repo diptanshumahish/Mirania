@@ -6,9 +6,9 @@ export const site = {
   name: "Mirania",
   legalName: "Mirania Furniture",
   url: "https://mirania.in",
-  tagline: "At Mirania, we are driven to transform spaces into spectacular, comfortable havens.",
+  tagline: "A furniture house for spaces that need decisions, not just products.",
   shortDescription:
-    "Mirania is a multi-designer furniture boutique in Eastern India, curating premium home, office and hospitality interiors through opulent furniture and accent pieces.",
+    "Mirania is a Kolkata furniture house working across residences, workplaces and project-led interiors: retail, bespoke manufacturing, curated international brands and project execution under one roof.",
   founded: 2003,
   city: "Kolkata",
   timezone: "Asia/Kolkata",
@@ -42,7 +42,7 @@ export const contact = {
 
 export const nav = [
   { label: "About", href: "/about" },
-  { label: "Collections", href: "/collections" },
+  { label: "Projects", href: "/projects" },
   { label: "Brands", href: "/brands" },
   { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/contact" },
@@ -65,6 +65,86 @@ export const about = {
   ],
   pullQuote:
     "Our opportunity, as designers, is to learn how to handle the complexity, rather than shy away from it, and to realize that the big art of design is to make complicated things simple.",
+} as const;
+
+/**
+ * Content from the Mirania Company Profile (2026). The `about` block above is
+ * the earlier site copy; the journal still quotes it as the house's original
+ * words.
+ */
+export const profile = {
+  intro:
+    "Mirania works across private residences, workplaces and project-led interiors. We bring together retail experience, curated international brands, our own manufacturing capability and execution support, so that every space can be resolved with clarity.",
+  headline: "Retail clarity. Manufacturing depth. Design curation.",
+  strength:
+    "The strength of Mirania is not a single category. It is the ability to move between product, material, making and site realities without losing the design intent.",
+  story: [
+    "For over three decades, Mirania has worked across residential and workplace interiors, bringing together furniture, design and execution under one roof. We work with homeowners, architects, designers and businesses to understand what a space needs before deciding what belongs in it.",
+    "Our portfolio brings together international furniture brands, bespoke solutions and our own design capabilities, supported by consultation, project coordination, installation and after-sales service. What connects it all is a considered approach to proportion, material, comfort and execution.",
+  ],
+  mission: [
+    "For over three decades, Mirania has believed that exceptional furniture is about more than filling a space. It is about understanding how that space should feel, function and endure.",
+    "Our mission is to bring together thoughtful design, globally respected brands, bespoke manufacturing and meticulous execution. Working closely with architects, designers, corporations and private clients, we translate ideas into considered furniture solutions, from a single statement piece to complete workplaces and residences.",
+  ],
+  vision: [
+    "To be one of India's most respected names in furniture, recognised for our discernment, design understanding and depth of experience.",
+    "We envision Mirania as a destination where global design meets Indian craftsmanship, local expertise and personalised service, while staying rooted in the values that have defined us for over 30 years: meaningful relationships, uncompromising quality and design with lasting relevance.",
+  ],
+  approach:
+    "A catalogue can offer products. A factory can offer possibilities. Mirania is designed to connect the two, choosing what exists beautifully and creating what the brief demands.",
+  facts: [
+    { n: "30+", label: "Years of furniture and design-led work in Kolkata" },
+    { n: "Home + Workplace", label: "Retail and project capability across both worlds" },
+    { n: "Global + In-house", label: "International partners alongside Mirania-born brands" },
+    { n: "One point", label: "Of responsibility, from selection to delivery and service" },
+  ],
+  capabilities: [
+    {
+      name: "Retail",
+      title: "Furniture selected with context.",
+      text: "Mirania's retail universe serves both home and office clients, offering guided selection across furniture, finishes, materials and complementary pieces.",
+      tags: ["Residential furniture", "Workplace furniture", "Executive spaces", "Showroom trials", "Material and finish guidance"],
+      image: "/img/profile/retail.jpg",
+    },
+    {
+      name: "Bespoke",
+      title: "When the right piece does not exist, we make it.",
+      text: "Our manufacturing capability allows Mirania to develop furniture around individual briefs, spatial constraints, proportions, materials and finishes.",
+      tags: ["Brief", "Detail", "Material", "Make", "Install"],
+      image: "/img/profile/bespoke.jpg",
+    },
+    {
+      name: "Curation",
+      title: "A selected portfolio, not a catalogue dump.",
+      text: "Each brand has a defined role, from workplace performance and acoustic separation to upholstery, light control and residential furniture. The portfolio broadens what a project can solve, not simply what it can buy.",
+      tags: ["International partners", "Mirania-born brands"],
+      image: "/img/profile/curation.jpg",
+    },
+    {
+      name: "Office & Projects",
+      title: "Workplaces need more than chairs and tables.",
+      text: "Mirania supports workplace projects through product selection, specification, planning coordination, site installation and service beyond handover.",
+      tags: ["Seating", "Desking", "Executive", "Meeting", "Collaboration", "Partitions", "Storage", "Pods"],
+      image: "/img/profile/office.jpg",
+    },
+  ],
+  process: [
+    { step: "Understand", text: "Brief, space, use and budget" },
+    { step: "Curate", text: "Products, systems and materials" },
+    { step: "Specify", text: "Dimensions, finishes and technical requirements" },
+    { step: "Develop", text: "Custom solutions where required" },
+    { step: "Coordinate", text: "Designers, site teams, orders and execution" },
+    { step: "Deliver", text: "Installation and handover" },
+    { step: "Support", text: "Service after installation" },
+  ],
+  aftercare: [
+    "Installation supervision",
+    "Warranty coordination",
+    "Maintenance and repairs",
+    "AMC support",
+    "Reconfiguration",
+    "Post-installation assistance",
+  ],
 } as const;
 
 export const credits = {

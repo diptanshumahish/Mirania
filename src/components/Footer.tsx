@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { contact, credits, nav, site } from "@/data/site";
-import { activeCategories } from "@/data/catalog";
+import { brands } from "@/data/catalog";
 import { Arrow, Lockup } from "./Logo";
 import FooterShell from "./FooterShell";
 import Subscribe from "./Subscribe";
@@ -56,12 +56,12 @@ export default function Footer() {
           </div>
 
           <div className="footer__col">
-            <p className="footer__label">Collections</p>
+            <p className="footer__label">Brands</p>
             <ul className="footer__list t-md">
-              {activeCategories.map((c) => (
-                <li key={c.slug}>
-                  <Link href={`/collections/${c.slug}`} className="link-u">
-                    {c.name}
+              {brands.map((b) => (
+                <li key={b.slug}>
+                  <Link href={`/brands/${b.slug}`} className="link-u">
+                    {b.name}
                   </Link>
                 </li>
               ))}
@@ -98,7 +98,7 @@ export default function Footer() {
 
         <div className="footer__brand-row">
           <p className="footer__line">
-            Spaces transformed into <em>comfortable havens</em>, since {site.founded}.
+            Spaces that need <em>decisions</em>, not just products.
           </p>
           <Link href="/" className="footer__brand" aria-label="Mirania Furniture — home">
             <Lockup />

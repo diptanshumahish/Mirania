@@ -10,7 +10,16 @@ export type Product = {
   gallery: string[];
 };
 
-export const products = raw as Product[];
+/**
+ * Only pieces from houses in the current portfolio are published. Older
+ * entries stay in the JSON so a returning house needs no data work.
+ */
+const carried = new Set([
+  "stanley", "steelcase", "hunter-douglas", "deko", "wendelbo", "bolia",
+  "viccarbe", "vitra", "sycaamore", "at-ease", "grado", "segis", "orangebox",
+  "polyvision",
+]);
+export const products = (raw as Product[]).filter((p) => carried.has(p.brand));
 
 /* ------------------------------------------------------------------ */
 /* Categories                                                          */
@@ -106,104 +115,294 @@ export const categories: Category[] = [
 export type Brand = {
   slug: string;
   name: string;
+  /** Country of origin, as used in short labels. */
   origin: string;
+  /** City or region the house was founded in, as the company profile gives it. */
+  place: string;
+  founded: number;
+  /** Mirania-born brands, as opposed to international partners. */
+  own?: boolean;
+  /** One-line headline from the company profile. */
+  tagline: string;
+  /** Short description for cards and meta. */
   blurb: string;
+  /** Long-form story for the brand page. */
+  story: string[];
+  /** What the house covers, as listed in the company profile. */
+  disciplines: string[];
   logo: string;
   cover: string;
   /** Room photograph used where the house is introduced editorially. */
   scene: string;
+  /** Additional photography for the brand page. */
+  gallery: string[];
 };
 
+/** Order follows the Mirania company profile. */
 export const brands: Brand[] = [
   {
     slug: "stanley",
     name: "Stanley",
     origin: "India",
+    place: "Bangalore, India",
+    founded: 1999,
+    tagline: "Residential comfort with crafted presence.",
     blurb:
-      "India's foremost luxury leather furniture house. Full-grain hides, recliner engineering and a catalogue deep enough to furnish an entire home in one language.",
-    logo: "/img/f/stanley.jpg",
+      "An Indian luxury furniture brand rooted in leather and upholstery craftsmanship, now furnishing the full home.",
+    story: [
+      "Stanley is an Indian luxury furniture brand rooted in leather and upholstery craftsmanship. Its portfolio has expanded from sofas into full-home furniture.",
+      "Within Mirania, Stanley strengthens the residential offer with material richness, comfort and manufacturing depth.",
+    ],
+    disciplines: ["Living", "Dining", "Bedrooms", "Upholstery", "Lifestyle"],
+    logo: "/img/brands/stanley/logo.png",
     cover: "/img/site/stanley-feature.jpg",
     scene: "/img/site/slider03.jpg",
-  },
-  {
-    slug: "bolia",
-    name: "Bolia",
-    origin: "Denmark",
-    blurb:
-      "New Scandinavian design. Bolia works with independent designers across the Nordics to produce soft, considered furniture made to order in Europe.",
-    logo: "/img/f/bolia.jpg",
-    cover: "/img/site/bolia-feature.jpg",
-    scene: "/img/site/bolia-feature.jpg",
-  },
-  {
-    slug: "wendelbo",
-    name: "Wendelbo",
-    origin: "Denmark",
-    blurb:
-      "A family-run Danish upholstery house since 1965, known for generous seating silhouettes and a restrained, tactile material palette.",
-    logo: "/img/f/wendelbo.jpg",
-    cover: "/img/site/wendelbo-feature.jpg",
-    scene: "/img/site/wendelbo-feature.jpg",
-  },
-  {
-    slug: "viccarbe",
-    name: "Viccarbe",
-    origin: "Spain",
-    blurb:
-      "Valencian contemporary design, produced with Mediterranean craft and a roster of international architects. Sculptural lounge and table systems.",
-    logo: "/img/f/viccarbe.jpg",
-    cover: "/img/site/viccarbe-feature.jpg",
-    scene: "/img/site/viccarbe-feature1.jpg",
+    gallery: ["/img/brands/stanley/01.jpg", "/img/site/stanley-feature-1.jpg", "/img/site/stanley-feature-2.jpg"],
   },
   {
     slug: "steelcase",
     name: "Steelcase",
     origin: "United States",
+    place: "Grand Rapids, USA",
+    founded: 1912,
+    tagline: "Performance, designed around people.",
     blurb:
-      "Workplace research turned into furniture. Ergonomic task seating and desking backed by more than a century of study into how people actually work.",
-    logo: "/img/f/steelcase.jpg",
+      "A global workplace company combining research, ergonomics and integrated furniture systems. Mirania is a Steelcase Certified Partner in Kolkata.",
+    story: [
+      "Steelcase is a global workplace company founded in Grand Rapids in 1912. Its strength is the combination of workplace research, ergonomics and integrated furniture systems.",
+      "Through Steelcase, Mirania delivers high-performance seating, desking, collaboration, executive and storage solutions, as the brand's Certified Partner in Kolkata.",
+    ],
+    disciplines: ["Seating", "Desking", "Collaboration", "Executive", "Storage"],
+    logo: "/img/brands/steelcase/logo.png",
     cover: "/img/site/steelcase-feature.jpg",
     scene: "/img/site/steelcase-feature1.jpg",
+    gallery: ["/img/brands/steelcase/01.jpg", "/img/brands/steelcase/02.jpg", "/img/brands/steelcase/03.jpg"],
   },
   {
     slug: "hunter-douglas",
     name: "Hunter Douglas",
-    origin: "Netherlands",
+    origin: "Germany",
+    place: "Düsseldorf, Germany",
+    founded: 1919,
+    tagline: "Light, privacy and performance.",
     blurb:
-      "The global standard in window covering. Duette, Silhouette, Pirouette and Luminette systems with PowerView motorisation.",
-    logo: "/img/f/hunter-douglas.jpg",
+      "Architectural intelligence for windows and light: daylight control, privacy and visual continuity for homes and workplaces.",
+    story: [
+      "Hunter Douglas brings architectural intelligence to windows and light.",
+      "Mirania uses these solutions to integrate daylight control, privacy and visual continuity into homes and workplaces.",
+    ],
+    disciplines: ["Blinds", "Shades", "Daylight control", "Privacy", "Interiors"],
+    logo: "/img/brands/hunter-douglas/logo.png",
     cover: "/img/site/hd-feature.jpg",
-    scene: "/img/site/hd-feature.jpg",
+    scene: "/img/brands/hunter-douglas/02.jpg",
+    gallery: ["/img/brands/hunter-douglas/01.jpg", "/img/brands/hunter-douglas/02.jpg"],
+  },
+  {
+    slug: "deko",
+    name: "DEKO",
+    origin: "Denmark",
+    place: "Denmark",
+    founded: 1970,
+    tagline: "Partitions with technical precision.",
+    blurb:
+      "High-performance interior partitioning: cabins, meeting rooms and enclosed spaces with transparency and acoustic control.",
+    story: [
+      "DEKO extends Mirania's capability into high-performance interior partitioning, creating cabins, meeting rooms and enclosed spaces with transparency, acoustic control and technical precision.",
+    ],
+    disciplines: ["Glass partitions", "Acoustics", "Doors", "Cabins", "Meeting rooms"],
+    logo: "/img/brands/deko/logo.png",
+    cover: "/img/brands/deko/01.jpg",
+    scene: "/img/brands/deko/01.jpg",
+    gallery: ["/img/brands/deko/01.jpg", "/img/brands/deko/02.jpg"],
+  },
+  {
+    slug: "wendelbo",
+    name: "Wendelbo",
+    origin: "Denmark",
+    place: "Aarhus, Denmark",
+    founded: 1955,
+    tagline: "Danish upholstery, three generations on.",
+    blurb:
+      "A Danish family upholstery workshop since 1955, now a contemporary collection shaped with international designers.",
+    story: [
+      "Wendelbo began as a Danish family upholstery workshop in 1955. Across three generations, that craft has evolved through collaborations with international designers into a contemporary furniture collection.",
+      "Mirania brings Wendelbo into spaces that call for refined lounge and residential pieces with material depth.",
+    ],
+    disciplines: ["Sofas", "Lounge", "Dining", "Tables", "Accessories"],
+    logo: "/img/brands/wendelbo/logo.png",
+    cover: "/img/site/wendelbo-feature.jpg",
+    scene: "/img/brands/wendelbo/01.jpg",
+    gallery: ["/img/brands/wendelbo/01.jpg", "/img/site/wendelbo-feature1.jpg"],
+  },
+  {
+    slug: "bolia",
+    name: "Bolia",
+    origin: "Denmark",
+    place: "Aarhus, Denmark",
+    founded: 2000,
+    tagline: "New Scandinavian Design, made to order.",
+    blurb:
+      "An international design brand centred on New Scandinavian Design, craftsmanship and made-to-order furniture.",
+    story: [
+      "Bolia was established in Aarhus in 2000 and grew from an online-first furniture company into an international design brand. Its collection centres on New Scandinavian Design, craftsmanship and made-to-order furniture.",
+      "Within Mirania, Bolia adds a lighter residential and lounge layer across home and informal workplace settings.",
+    ],
+    disciplines: ["Sofas", "Lounge", "Dining", "Tables", "Accessories"],
+    logo: "/img/brands/bolia/logo.png",
+    cover: "/img/site/bolia-feature.jpg",
+    scene: "/img/brands/bolia/01.jpg",
+    gallery: ["/img/brands/bolia/01.jpg", "/img/brands/bolia/02.jpg"],
+  },
+  {
+    slug: "viccarbe",
+    name: "Viccarbe",
+    origin: "Spain",
+    place: "Valencia, Spain",
+    founded: 2000,
+    tagline: "Warmth and flexibility for shared spaces.",
+    blurb:
+      "Collaborative furniture from Valencia, created with internationally recognised designers.",
+    story: [
+      "Founded in Valencia in 2000 by Víctor Carrasco, Viccarbe specialises in collaborative furniture created with internationally recognised designers.",
+      "Within Mirania, the collection brings warmth, flexibility and a quiet contemporary character to meeting, lounge and shared spaces.",
+    ],
+    disciplines: ["Lounge", "Collaborative", "Meeting", "Tables", "Seating"],
+    logo: "/img/brands/viccarbe/logo.png",
+    cover: "/img/site/viccarbe-feature.jpg",
+    scene: "/img/brands/viccarbe/01.jpg",
+    gallery: ["/img/brands/viccarbe/01.jpg", "/img/brands/viccarbe/02.jpg"],
+  },
+  {
+    slug: "vitra",
+    name: "Vitra",
+    origin: "Switzerland",
+    place: "Basel region, Switzerland",
+    founded: 1950,
+    tagline: "Enduring classics, contemporary work.",
+    blurb:
+      "Authentic design, longevity and cultural weight across home, workplace and public interiors.",
+    story: [
+      "Founded in 1950, Vitra has built its identity through close collaboration with major designers and the continued production of enduring classics alongside contemporary work.",
+      "Within Mirania, Vitra adds authentic design, longevity and cultural weight across home, workplace and public interiors.",
+    ],
+    disciplines: ["Seating", "Lounge", "Tables", "Workplace", "Accessories"],
+    logo: "/img/brands/vitra/logo.png",
+    cover: "/img/brands/vitra/01.jpg",
+    scene: "/img/brands/vitra/02.jpg",
+    gallery: ["/img/brands/vitra/01.jpg", "/img/brands/vitra/02.jpg", "/img/brands/vitra/03.jpg"],
+  },
+  {
+    slug: "sycaamore",
+    name: "Sycaamore",
+    origin: "India",
+    place: "Kolkata, India",
+    founded: 2010,
+    own: true,
+    tagline: "Made around the individual.",
+    blurb:
+      "Mirania's bespoke furniture expression, developed around individual briefs, dimensions, materials and detailing.",
+    story: [
+      "Sycaamore is Mirania's bespoke furniture expression, developed around individual briefs, dimensions, materials and detailing.",
+      "It is where the portfolio moves from selection into making.",
+    ],
+    disciplines: ["Bespoke", "Residential", "Executive", "Material", "Made to order"],
+    logo: "/img/brands/sycaamore/logo.png",
+    cover: "/img/brands/sycaamore/01.jpg",
+    scene: "/img/brands/sycaamore/01.jpg",
+    gallery: ["/img/brands/sycaamore/01.jpg", "/img/brands/sycaamore/02.jpg"],
+  },
+  {
+    slug: "at-ease",
+    name: "At Ease",
+    origin: "India",
+    place: "Kolkata, India",
+    founded: 2022,
+    own: true,
+    tagline: "Workplace essentials, thoughtfully resolved.",
+    blurb:
+      "Mirania's own workplace furniture brand: everyday office furniture with design discipline, comfort and commercial flexibility.",
+    story: [
+      "At Ease is Mirania's own workplace furniture brand, created for offices that need well-resolved everyday furniture with design discipline, comfort and commercial flexibility.",
+      "It broadens Mirania's workplace offer across seating, workstations, executive, meeting and storage.",
+    ],
+    disciplines: ["Seating", "Workstations", "Executive", "Meeting", "Storage"],
+    logo: "/img/brands/at-ease/logo.png",
+    cover: "/img/brands/at-ease/01.jpg",
+    scene: "/img/brands/at-ease/01.jpg",
+    gallery: ["/img/brands/at-ease/01.jpg"],
   },
   {
     slug: "grado",
     name: "Grado",
-    origin: "Italy",
+    origin: "China",
+    place: "Hangzhou, China",
+    founded: 2014,
+    tagline: "Furniture for the spaces between work.",
     blurb:
-      "Italian upholstery with a graphic, contemporary edge: sofas and seating built around bold volumes and confident colour.",
-    logo: "/img/f/grado.jpg",
+      "A softer design vocabulary across sofas, lounge chairs, tables and public-space furniture.",
+    story: [
+      "Grado adds a softer design vocabulary across sofas, lounge chairs, tables and public-space furniture.",
+      "Useful where the office needs comfort without becoming decorative.",
+    ],
+    disciplines: ["Breakout", "Reception", "Lounge", "Informal meeting"],
+    logo: "/img/brands/grado/logo.png",
     cover: "/img/site/grado-feature.jpg",
-    scene: "/img/site/grado-feature.jpg",
+    scene: "/img/brands/grado/01.jpg",
+    gallery: ["/img/brands/grado/01.jpg", "/img/site/grado-feature1.jpg"],
   },
   {
-    slug: "m-a-d",
-    name: "M.A.D",
-    origin: "Canada",
+    slug: "segis",
+    name: "Segis",
+    origin: "Italy",
+    place: "Poggibonsi, Tuscany, Italy",
+    founded: 1983,
+    tagline: "The workplace's light, flexible layer.",
     blurb:
-      "Modern accent design. Sculptural tables, barstools and seating that treat everyday furniture as an opportunity for form.",
-    logo: "/img/f/m-a-d.jpg",
-    cover: "/img/site/mad-feature.jpg",
-    scene: "/img/site/mad-feature1.jpg",
+      "Chairs, stools, beam seating, lounge seating and tables for office, hospitality and education settings.",
+    story: [
+      "Segis gives the workplace its light, flexible layer: chairs, stools, beam seating, lounge seating and tables for office, hospitality and education settings.",
+    ],
+    disciplines: ["Chairs", "Stools", "Beam seating", "Lounge", "Tables"],
+    logo: "/img/brands/segis/logo.png",
+    cover: "/img/brands/segis/01.jpg",
+    scene: "/img/brands/segis/01.jpg",
+    gallery: ["/img/brands/segis/01.jpg"],
   },
   {
-    slug: "michael-strads",
-    name: "Michael Strads",
+    slug: "orangebox",
+    name: "Orangebox",
     origin: "United Kingdom",
+    place: "United Kingdom",
+    founded: 2002,
+    tagline: "For the changing workplace.",
     blurb:
-      "Tailored lounge and dining seating, cut and finished with a couturier's attention to seam, stitch and stance.",
-    logo: "/img/f/michael-strads.jpg",
-    cover: "/img/site/ms-feature.jpg",
-    scene: "/img/site/ms-feature.jpg",
+      "Collaborative settings, acoustic and visual privacy, pods and alternative workpoints.",
+    story: [
+      "Orangebox supports the changing workplace through collaborative settings, acoustic and visual privacy, pods and alternative workpoints.",
+    ],
+    disciplines: ["Pods", "Privacy", "Team settings"],
+    logo: "/img/brands/orangebox/logo.png",
+    cover: "/img/brands/orangebox/02.jpg",
+    scene: "/img/brands/orangebox/02.jpg",
+    gallery: ["/img/brands/orangebox/01.jpg", "/img/brands/orangebox/02.jpg"],
+  },
+  {
+    slug: "polyvision",
+    name: "PolyVision",
+    origin: "United States",
+    place: "United States",
+    founded: 1954,
+    tagline: "Walls that work.",
+    blurb:
+      "Writing surfaces, organisation tools and CeramicSteel collaboration surfaces for offices, education and shared workspaces.",
+    story: [
+      "PolyVision turns walls into active tools: writing surfaces, organisation tools and CeramicSteel collaboration surfaces for offices, education and shared workspaces.",
+    ],
+    disciplines: ["Writing walls", "CeramicSteel", "Collaboration surfaces"],
+    logo: "/img/brands/polyvision/logo.png",
+    cover: "/img/brands/polyvision/01.jpg",
+    scene: "/img/brands/polyvision/01.jpg",
+    gallery: ["/img/brands/polyvision/01.jpg"],
   },
 ];
 

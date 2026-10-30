@@ -9,6 +9,16 @@ const nextConfig: NextConfig = {
    * somewhere else while a dev server is up.
    */
   distDir: process.env.NEXT_DIST_DIR || ".next",
+  /**
+   * The collections section is retired (its route lives on, unrouted, in
+   * `src/app/_collections`). Old links and search results land on brands.
+   */
+  async redirects() {
+    return [
+      { source: "/collections", destination: "/brands", permanent: false },
+      { source: "/collections/:path*", destination: "/brands", permanent: false },
+    ];
+  },
 };
 
 export default nextConfig;

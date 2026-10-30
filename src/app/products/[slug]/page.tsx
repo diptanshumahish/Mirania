@@ -138,10 +138,8 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
 
   const trail = [
     { name: "Home", path: "/" },
-    { name: "Collections", path: "/collections" },
-    ...(category
-      ? [{ name: category.name, path: `/collections/${category.slug}` }]
-      : []),
+    { name: "Brands", path: "/brands" },
+    ...(brand ? [{ name: brand.name, path: `/brands/${brand.slug}` }] : []),
     { name: p.name, path },
   ];
 
@@ -209,14 +207,14 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
       />
       <header className="phead">
         <p className="mono-sm muted phead__crumbs">
-          <Link href="/collections" className="link-u">
-            Collections
+          <Link href="/brands" className="link-u">
+            Brands
           </Link>
           <span aria-hidden="true">/</span>
-          {category && (
+          {brand && (
             <>
-              <Link href={`/collections/${category.slug}`} className="link-u">
-                {category.name}
+              <Link href={`/brands/${brand.slug}`} className="link-u">
+                {brand.name}
               </Link>
               <span aria-hidden="true">/</span>
             </>
@@ -258,27 +256,20 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
                 <div className="deflist__row">
                   <span className="mono-sm muted">House</span>
                   <Link href={`/brands/${brand.slug}`} className="t-base link-u">
-                    {brand.name}, {brand.origin}
+                    {brand.name}, {brand.place}
                   </Link>
                 </div>
               )}
               {category && (
                 <div className="deflist__row">
                   <span className="mono-sm muted">Category</span>
-                  <Link href={`/collections/${category.slug}`} className="t-base link-u">
-                    {category.name}
-                  </Link>
+                  <span className="t-base">{category.name}</span>
                 </div>
               )}
               {sub && (
                 <div className="deflist__row">
                   <span className="mono-sm muted">Type</span>
-                  <Link
-                    href={`/collections/${p.category}?sub=${p.sub}`}
-                    className="t-base link-u"
-                  >
-                    {sub}
-                  </Link>
+                  <span className="t-base">{sub}</span>
                 </div>
               )}
               <div className="deflist__row">
@@ -324,7 +315,7 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
           <section className="block-pad" style={{ paddingTop: "4.8rem", paddingBottom: "6.4rem" }}>
             <div className="sec-head">
               <div className="sec-head__title">
-                <h2 className="h3">Also on the floor</h2>
+                <h2 className="h3">You may also like</h2>
               </div>
             </div>
             <ul className="pgrid">
